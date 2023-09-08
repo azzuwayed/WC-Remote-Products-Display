@@ -1,0 +1,244 @@
+/* General styles */
+.woorpd-settings-wrap {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #e2e4e7;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.woorpd-settings-wrap header {
+    border-bottom: 2px solid #0073aa;
+    margin-bottom: 20px;
+}
+
+.woorpd-settings-wrap h2 {
+    color: #333;
+    margin: 0;
+    font-size: 24px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Tabs styling */
+.woorpd-settings-wrap nav {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.woorpd-settings-wrap .tablink {
+    flex: 1;
+    background-color: #f7f7f7;
+    color: #333;
+    border: 1px solid #e2e4e7;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 4px;
+    margin-right: 10px;
+    align-items: center;
+    gap: 10px;
+}
+
+.woorpd-settings-wrap .tablink:last-child {
+    margin-right: 0;
+}
+
+.woorpd-settings-wrap .tablink:hover {
+    background-color: #e2e4e7;
+}
+
+.woorpd-settings-wrap .tablink.active {
+    background-color: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+}
+
+.woorpd-settings-wrap .tablink i {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.woorpd-settings-wrap .tabcontent {
+    display: none;
+    padding: 20px 20px 0 20px;
+    border-top: 1px solid #e2e4e7;
+}
+
+.woorpd-settings-wrap .tabcontent.active-content {
+    display: block;
+}
+
+/* Form styles */
+.woorpd-settings-wrap label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.woorpd-settings-wrap input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    margin-top: 5px;
+}
+
+.woorpd-save-container{
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-top: 15px;
+}
+
+.woorpd-right-buttons {
+    display: flex;
+    gap: 5px; 
+}
+
+/* Save button styles */
+.woorpd-settings-wrap .save-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.woorpd-settings-wrap .save-btn:hover {
+    background-color: #005a87;
+}
+
+.woorpd-settings-wrap .save-btn .save-spinner,
+.woorpd-settings-wrap .save-btn .save-success {
+    margin-left: 10px;
+}
+
+.woorpd-settings-wrap .save-btn .save-spinner,
+.woorpd-settings-wrap .save-btn .save-success {
+    display: none;
+}
+
+.woorpd-settings-wrap .save-btn.saving .btn-label {
+    display: none;
+}
+
+.woorpd-settings-wrap .save-btn.saving .save-spinner {
+    display: inline-block;
+}
+
+.woorpd-settings-wrap .save-btn.saved .save-success {
+    display: inline-block;
+}
+
+/* Error message styles */
+.woorpd-settings-wrap .error-message.has-error {
+    color: #fff;
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    border: 1px solid #c0392b;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0px 0px 5px rgba(231, 76, 60, 0.3);
+}
+
+.red-color{
+color: #e74c3c;
+}
+
+.green-color{
+color:green;
+}
+
+.woorpd-settings-wrap .error-message:before {
+    content: '\f488';
+    font-family: "dashicons";
+    font-weight: 900;
+    margin-right: 5px;
+    display: none;
+}
+
+.woorpd-settings-wrap .error-message.has-error:before {
+    display: inline-block;
+}
+
+.placeholder-btn{
+    margin-left: 10px;
+}
+
+/* Description styles */
+.woorpd-settings-wrap .description {
+    font-size: 12px;
+    color: #777;
+    margin: 5px 0; 
+}
+
+/* Dropdown & Multiple Select styles */
+.woorpd-settings-wrap select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    margin-top: 5px;
+}
+
+.woorpd-settings-wrap select[multiple] {
+    height: 150px;
+}
+
+/* Fieldset & Legend styles */
+.woorpd-settings-wrap fieldset {
+    border: 1px solid #e2e4e7;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.woorpd-settings-wrap legend {
+    font-weight: bold;
+    color: #333;
+    padding: 0 5px;
+}
+
+/* Checkbox styles */
+.woorpd-settings-wrap label input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Placeholder button styles */
+.woorpd-settings-wrap .placeholder-btn {
+    background-color: #f7f7f7;
+    color: #333;
+    padding: 10px 15px;
+    border: 1px solid #e2e4e7;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.woorpd-settings-wrap .placeholder-btn:hover {
+    background-color: #e2e4e7;
+}
+
+.woorpd-settings-wrap .dashicons-admin-generic:before{
+    font-size: 30px;
+    line-height: 0.7;
+}
