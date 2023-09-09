@@ -2,7 +2,7 @@
 .woorpd-settings-wrap {
     font-family: 'Arial', sans-serif;
     max-width: 800px;
-    margin: 20px auto;
+    margin-top: 20px;
     padding: 20px;
     border: 1px solid #e2e4e7;
     background-color: #fff;
@@ -78,7 +78,7 @@
 /* Form styles */
 .woorpd-settings-wrap label {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
@@ -121,6 +121,15 @@
     background-color: #005a87;
 }
 
+.woorpd-settings-wrap .save-btn:disabled {
+    background-color: #b5b5b5;
+    cursor: not-allowed;
+}
+
+.woorpd-settings-wrap .save-btn:disabled:hover {
+    background-color: #b5b5b5;
+}
+
 .woorpd-settings-wrap .save-btn .save-spinner,
 .woorpd-settings-wrap .save-btn .save-success {
     margin-left: 10px;
@@ -144,6 +153,23 @@
 }
 
 /* Error message styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.error-feedback {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.global-error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 .woorpd-settings-wrap .error-message.has-error {
     color: #fff;
     background-color: #e74c3c;
@@ -151,7 +177,7 @@
     border: 1px solid #c0392b;
     border-radius: 4px;
     font-size: 14px;
-    margin-left: 10px;
+    margin-top: 10px;
     display: inline-flex;
     align-items: center;
     box-shadow: 0px 0px 5px rgba(231, 76, 60, 0.3);
@@ -177,7 +203,7 @@ color:green;
     display: inline-block;
 }
 
-.placeholder-btn{
+.right-btn{
     margin-left: 10px;
 }
 
@@ -222,8 +248,8 @@ color:green;
     margin-right: 5px;
 }
 
-/* Placeholder button styles */
-.woorpd-settings-wrap .placeholder-btn {
+/* Right button styles */
+.woorpd-settings-wrap .right-btn {
     background-color: #f7f7f7;
     color: #333;
     padding: 10px 15px;
@@ -234,7 +260,7 @@ color:green;
     margin-left: 10px;
 }
 
-.woorpd-settings-wrap .placeholder-btn:hover {
+.woorpd-settings-wrap .right-btn:hover {
     background-color: #e2e4e7;
 }
 

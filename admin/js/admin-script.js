@@ -20,6 +20,27 @@ function openTab(tabName, elmnt) {
     // Set the default tab to be displayed
     openTab('API Connection', $('.tablink[data-tab="API Connection"]')[0]);
 
+    // Form validation
+    $('#api-connection-settings-form').on('submit', function(e) {
+        let isValid = true;
+        $(this).find('input[required]').each(function() {
+            if (!$(this).val()) {
+                isValid = false;
+                const fieldName = $(this).attr('id');
+                $(`.error-feedback[data-for="${fieldName}"]`).text('This field is required.').show();
+            } else {
+                const fieldName = $(this).attr('id');
+                $(`.error-feedback[data-for="${fieldName}"]`).text('').hide();
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            $('.global-error-message').text('Please fill out all required fields.');
+        } else {
+            $('.global-error-message').text('');
+        }
+    });
     // AJAX for saving API Connection settings
     $('#api-connection-settings-form').on('submit', function(e) {
         e.preventDefault();
@@ -42,12 +63,34 @@ function openTab(tabName, elmnt) {
             // Hide spinner, show checkmark, and re-enable save button
             $('.save-spinner').hide();
             if (response.success) {
-                $('.save-success').show().delay(2000).fadeOut();
+                $('.save-success').show().delay(1000).fadeOut();
             } else {
                 // Display the error message and show the error icon
                 $('.error-message').text('An error occurred: ' + response.data).addClass('has-error');
             }
             $('input[type="submit"]').removeClass('saving').prop('disabled', false);
+        });
+    });
+    // AJAX for resetting API Connection settings
+    $('#woorpd-reset-settings-button').on('click', function(e) {
+        e.preventDefault();
+
+        // Hide any previous error messages
+        $('.error-message').text('').removeClass('has-error');
+
+        $.post(woorpd_ajax_object.ajax_url, {
+            action: 'reset_woorpd_options',
+            nonce: $('input[name="nonce"]').val()
+        }, function(response) {
+            if (response.success) {
+                // Clear the form fields and show a success message
+                $('input[name="api-woo-url"]').val('');
+                $('input[name="api-woo-ck"]').val('');
+                $('input[name="api-woo-cs"]').val('');
+            } else {
+                // Display the error message and show the error icon
+                $('.error-message').text('An error occurred: ' + response.data).addClass('has-error');
+            }
         });
     });
 })(jQuery);
