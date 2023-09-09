@@ -88,6 +88,7 @@ class WOORPD_WooCommerceAPI
         // Validate the website URL
         if (!filter_var($this->website_url, FILTER_VALIDATE_URL)) {
             $this->logger?->log("Invalid website URL provided.", 'ERROR');
+            return false; // Stop further execution
         }
 
         $this->consumer_key = sanitize_text_field($consumer_key);
@@ -148,7 +149,7 @@ class WOORPD_WooCommerceAPI
         if ($this->logger) {
             return $this->logger->log($message, $type);
         }
-        return array('error' => __("An error occurred. Please try again later or enable debug for more details.", "woorpd"));
+        return array('error' => __("An error occurred while processing your request. Please check your API credentials and ensure your WooCommerce store is accessible.", "woorpd"));
     }
 
     /**
@@ -244,6 +245,10 @@ class WOORPD_WooCommerceAPI
         } while (count($all_products) < $count_limit && count($products) > 0 && $page <= $max_pages);
 
         // Return only the number of products specified by $count_limit, or error if no products were found
-        return count($all_products) ? array_slice($all_products, 0, $count_limit) : ['message' => __("No products found matching the criteria.", "woorpd")];
+        if (count($all_products)) {
+            return ['data' => array_slice($all_products, 0, $count_limit)];
+        } else {
+            return ['error' => __("No products found matching the criteria.", "woorpd")];
+        }
     }
 }
