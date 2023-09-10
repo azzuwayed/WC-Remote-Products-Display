@@ -12,10 +12,10 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     $apiwoocs  = get_option('api-woo-cs');
 
     // Create a logger instance
-    $logger = new WooRPDLogger();
+    // $logger = new WooRPDLogger();
 
     // Create an API instance with the logger
-    $api = new WooRPDRemoteAPI($logger);
+    $api = new WooRPDRemoteAPI();
 
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
@@ -62,6 +62,9 @@ function woorpd_display_products($atts = [])
     $display_price = get_option('woorpd_display_price', true);
     $display_description = get_option('woorpd_display_description', true);
     $display_url = get_option('woorpd_display_url', true);
+
+    // Retrieve user-defined currency symbol option (add this part)
+    $user_currency_symbol = get_option('woorpd_currency_symbol', '$'); // Replace with the actual option name
 
     // Extract the shortcode attributes
     $attributes = shortcode_atts([
@@ -117,8 +120,18 @@ function woorpd_display_products($atts = [])
         preg_match($currency_pattern, $price_html, $currency_matches);
         $currency_symbol = isset($currency_matches[1]) ? html_entity_decode($currency_matches[1]) : '';
 
+        // Check if price exists and show currency symbol accordingly
         if ($display_price && isset($product["price"])) {
-            echo '<div class="woorpd-product-price">' . esc_html($currency_symbol . $product["price"]) . '</div>';
+            $price_output = '';
+            if (!empty($product["price"])) {
+                $price_output = esc_html($product["price"]);
+            }
+            if ($currency_symbol === 'ر.س') {
+                $price_output .= ' ' . esc_html($currency_symbol);
+            } elseif (!empty($currency_symbol)) {
+                $price_output = esc_html($currency_symbol) . ' ' . $price_output;
+            }
+            echo '<div class="woorpd-product-price">' . $price_output . '</div>';
         }
 
         if ($display_description) {
@@ -128,7 +141,7 @@ function woorpd_display_products($atts = [])
 
         // Add "Shop Now" button with an attractive style
         if ($display_url) {
-            $shop_now_label = __('Shop Now', 'woordp');
+            $shop_now_label = __('Shop Now', 'woorpd');
             echo '<a href="' . esc_url($product["permalink"]) . '" class="woorpd-shop-now-button">' . esc_html($shop_now_label) . '</a>';
         }
 

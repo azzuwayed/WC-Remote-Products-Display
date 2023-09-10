@@ -79,17 +79,17 @@ class WooRPDRemoteAPI
         // Trim and sanitize the website URL. Set the website_url first, even if it's invalid.
         $this->website_url = rtrim(sanitize_text_field($website_url), '/');
 
-        // Ensure the URL uses https when protocol is not set
-        if (strpos($this->website_url, 'https://') !== 0) {
-            // Check if it starts with http://
-            if (strpos(
-                $this->website_url,
-                'http://'
-            ) === 0) {
-                $this->website_url = 'https://' . substr($this->website_url, 7);
-            } else {
-                $this->website_url = 'https://' . $this->website_url;
-            }
+        // Ensure the URL uses HTTPS
+        if (strpos($this->website_url, 'https://') === 0) {
+            // The URL already uses HTTPS, no action needed
+        } elseif (
+            strpos($this->website_url, 'http://') === 0
+        ) {
+            // Replace 'http://' with 'https://'
+            $this->website_url = str_replace('http://', 'https://', $this->website_url);
+        } else {
+            // Prepend 'https://' to the URL
+            $this->website_url = 'https://' . $this->website_url;
         }
 
         // Validate the website URL
