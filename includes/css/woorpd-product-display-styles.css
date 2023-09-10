@@ -2,7 +2,7 @@
 .woorpd-products-wrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 30px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -19,7 +19,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 /* Image container to ensure 1:1 aspect ratio */
@@ -38,6 +37,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    filter: blur(3.5rem);
 }
 
 .woorpd-product-card .image-container img:hover {
@@ -59,12 +59,14 @@
 .woorpd-product-description {
     padding: 6px 15px;
     font-size: 0.9em;
+    line-height: 24px;
     color: #666;
     overflow: hidden; 
     text-overflow: ellipsis; 
     display: -webkit-box;
     -webkit-line-clamp: 3; 
     -webkit-box-orient: vertical;
+     flex: 1;
 }
 
 /* Tablet view: 2 cards per row */
@@ -130,4 +132,39 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px); /* Slight upward movement */
     transition: all 0.3s ease; /* Smooth transition */
+}
+
+/* Product category */
+.woorpd-product-category {
+    padding: 12px 15px;
+    font-size: 0.9em;
+    color: #777;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Show up to 2 lines for the category */
+    -webkit-box-orient: vertical;
+}
+
+/* Product price */
+.woorpd-product-price {
+    padding: 12px 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    border-top: 1px solid #ddd;
+}
+
+/* Shop Now button style */
+.woorpd-shop-now-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: black; 
+    color: #fff; 
+    text-decoration: none;
+    text-align: center;
+}
+
+.woorpd-shop-now-button:hover {
+    color: #fff;
 }

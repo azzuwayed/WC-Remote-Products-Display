@@ -26,3 +26,18 @@ function woorpd_add_settings_link($links)
     array_unshift($links, $settings_link);  // This places the "Settings" link at the beginning
     return $links;
 }
+
+/**
+ * Enable SSL certificate verification filter on local development environment with .local domains.
+ */
+function enable_ssl_certificate_verification_on_local()
+{
+    // Get the current host name
+    $host = $_SERVER['HTTP_HOST'];
+
+    // Check if the host name ends with '.local'
+    if (substr($host, -6) === '.local') {
+        add_filter('https_ssl_verify', '__return_false');
+    }
+}
+add_action('init', 'enable_ssl_certificate_verification_on_local');

@@ -6,11 +6,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Class WOORPD_Logger
+ * Class WooRPDLogger
  *
  * Logs messages for the WooRPD plugin.
  */
-class WOORPD_Logger
+class WooRPDLogger
 {
     /**
      * Centralized logging and error handling method.
@@ -20,34 +20,32 @@ class WOORPD_Logger
      * @param array $data Additional data to log.
      * @return array|null The error response if type is 'ERROR', null otherwise.
      */
-    public function log($message, $type = 'INFO', $data = array())
+    public function log(string $message, string $type = 'INFO', array $data = []): ?array
     {
-        // Check if WP_DEBUG and WP_DEBUG_LOG are enabled
-        if (defined('WP_DEBUG') && WP_DEBUG === true && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
-            if ($type === 'INFO' && !empty($data)) {
-                $message .= ' ' . json_encode($data);
-            }
+
+        if (WP_DEBUG && WP_DEBUG_LOG) {
+            $message = ($type === 'INFO' && !empty($data)) ? "$message " . json_encode($data) : $message;
+
+
             error_log("WooRPD [$type]: $message");
         }
 
-        if ($type === 'ERROR') {
-            return array('error' => $message);
-        }
+
+        return $type === 'ERROR' ? ['error' => $message] : null;
     }
 }
 
 /**
- * Class WOORPD_WooCommerceAPI
+ * Class WooRPDRemoteAPI
  *
  * Manages WooCommerce API connections and requests for the WooRPD plugin.
  */
-class WOORPD_WooCommerceAPI
+class WooRPDRemoteAPI
 {
-    const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
-    const API_ENDPOINT_CATEGORIES = "wp-json/wc/v3/products/categories";
-    const MAX_PER_PAGE = 100; // Max allowed by WooCommerce by default
-    const WOORPD_KEY = "woorpd_key";
-    const MINUTE_IN_SECONDS = 60; // Define a constant for 60 seconds
+    private const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
+    private const MAX_PER_PAGE = 100; // Max allowed by WooCommerce by default
+    private const WOORPD_RATE_LIMIT_KEY = "WOORPD_RATE_LIMIT_KEY";
+    private const MINUTE_IN_SECONDS = 60; // Define a constant for 60 seconds
 
     private $website_url;
     private $consumer_key;
@@ -59,13 +57,14 @@ class WOORPD_WooCommerceAPI
     private $timeout = 15; // 15 seconds
 
     /**
-     * WOORPD_WooCommerceAPI constructor.
+     * WooRPDRemoteAPI constructor.
      *
-     * @param WOORPD_Logger|null $logger The logger instance (optional).
+     * @param WooRPDLogger|null $logger The logger instance (optional).
      */
-    public function __construct(WOORPD_Logger $logger = null)
+    public function __construct(WooRPDLogger $logger = null)
     {
         $this->logger = $logger;
+        $this->initializeRateLimit();
     }
 
     /**
@@ -82,7 +81,15 @@ class WOORPD_WooCommerceAPI
 
         // Ensure the URL uses https when protocol is not set
         if (strpos($this->website_url, 'https://') !== 0) {
-            $this->website_url = 'https://' . $this->website_url;
+            // Check if it starts with http://
+            if (strpos(
+                $this->website_url,
+                'http://'
+            ) === 0) {
+                $this->website_url = 'https://' . substr($this->website_url, 7);
+            } else {
+                $this->website_url = 'https://' . $this->website_url;
+            }
         }
 
         // Validate the website URL
@@ -96,6 +103,16 @@ class WOORPD_WooCommerceAPI
     }
 
     /**
+     * Reset the rate limit count after a minute.
+     */
+    private function initializeRateLimit(): void
+    {
+        if (!get_transient(self::WOORPD_RATE_LIMIT_KEY)) {
+            set_transient(self::WOORPD_RATE_LIMIT_KEY, 0, self::MINUTE_IN_SECONDS);
+        }
+    }
+
+    /**
      * Check if caching is enabled.
      *
      * @return bool True if caching is enabled, false otherwise.
@@ -103,16 +120,6 @@ class WOORPD_WooCommerceAPI
     private function isCachingEnabled(): bool
     {
         return $this->cache_duration > 0;
-    }
-
-    /**
-     * Reset the rate limit count after a minute.
-     */
-    private function resetRateLimit()
-    {
-        if (!get_transient(self::WOORPD_KEY)) {
-            set_transient(self::WOORPD_KEY, 0, self::MINUTE_IN_SECONDS);
-        }
     }
 
     public function setCacheDuration(int $seconds)
@@ -173,9 +180,8 @@ class WOORPD_WooCommerceAPI
         }
 
         // Rate limiting
-        $current_requests = get_transient(self::WOORPD_KEY) ?: 0;
+        $current_requests = get_transient(self::WOORPD_RATE_LIMIT_KEY) ?: 0;
         if ($current_requests >= $this->rate_limit) {
-            $this->resetRateLimit();
             return $this->handleError("Rate limit exceeded. Please wait a moment and try again.", 'ERROR');
         }
 
@@ -184,6 +190,7 @@ class WOORPD_WooCommerceAPI
         if (is_wp_error($response)) {
             return $this->handleError("API request timed out: " . $response->get_error_message());
         }
+        delete_transient($cache_key);
 
         // Decode the response
         $decoded_response = json_decode(wp_remote_retrieve_body($response), true);
@@ -203,7 +210,7 @@ class WOORPD_WooCommerceAPI
         if ($this->isCachingEnabled()) {
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
-        set_transient(self::WOORPD_KEY, $current_requests + 1, 60); // 1 minute
+        set_transient(self::WOORPD_RATE_LIMIT_KEY, $current_requests + 1, 60); // 1 minute
 
         return $decoded_response;
     }
@@ -232,13 +239,19 @@ class WOORPD_WooCommerceAPI
                 return $products;
             }
 
-            // Log the INFO messages only if there's no error and if the logger is set
-            $this->logger?->log("Successfully connected to the WooCommerce API at $this->website_url", 'INFO');
-            $this->logger?->log("Fetching products", 'INFO', ['limit' => $count_limit, 'categories' => $filtered_categories]);
+            // Update pages for INFO Log 
+            $log_data = [
+                'pages' => $page,
+                'products' => $count_limit,
+                'categories' => $filtered_categories
+            ];
 
-            // Filter products based on catalog_visibility when using Dokan plugin
-            $filtered_products = array_filter($products, fn ($product) => !isset($product['catalog_visibility']) || $product['catalog_visibility'] === 'visible');
-            $all_products = array_merge($all_products, $filtered_products);
+            // Log the INFO messages only if there is no error and if the logger is enabled
+            $this->logger?->log("Successfully connected to the WooCommerce API at $this->website_url and fetching products.", 'INFO', $log_data);
+
+            // Filter products based on catalog_visibility 
+            $filtered_visibility = array_filter($products, fn ($product) => !isset($product['catalog_visibility']) || $product['catalog_visibility'] === 'visible');
+            $all_products = array_merge($all_products, $filtered_visibility);
             $page++;
 
             // Break the loop if we've fetched enough products or if there are no more products to fetch
