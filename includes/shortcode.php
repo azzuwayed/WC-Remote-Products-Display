@@ -12,32 +12,40 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     $apiwoocs  = get_option('api-woo-cs');
 
     // Create a logger instance
-    // $logger = new WooRPDLogger();
+    $logger = new WooRPDLogger();
 
     // Create an API instance with the logger
-    $api = new WooRPDRemoteAPI();
+    $api = new WooRPDRemoteAPI($logger);
 
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
 
     // Set cache duration, timeout, and rate limit (optional)
     $api->setCacheDuration(3600); // Cache for 1 hour (3600)
-    $api->setTimeout(20); // Set timeout to 20 seconds
-    $api->setRateLimit(10); // Allow 10 requests per minute
+    $api->setTimeout(10); // Set timeout to 20 seconds
+    $api->setRateLimit(2); // Allow 10 requests per minute
 
     //----------------------------------------------------------------
     // During Development ONLY
-    $woorpd_dev  = 0;
+    $woorpd_dev  = 1;
     $host = $_SERVER['HTTP_HOST'];
-    if (substr($host, -6) === '.local' && $woorpd_dev = 1) {
+    if (substr($host, -6) === '.local' && $woorpd_dev == 1) {
+        $logger->log("DEVELOPMENT MODE IS ENABLED!", 'INFO');
         $api->setCacheDuration(0);
         $api->flushCache();
     }
     //----------------------------------------------------------------
 
     // If $filtered_categories is not provided, use the global settings
-    $filtered_categories_str = get_option('woorpd_global_filtered_categories', []); // Default to empty string if not set
-    $filtered_categories = $filtered_categories_str ? array_map('intval', explode(',', $filtered_categories_str)) : [];
+    $filtered_categories_str = get_option('woorpd_global_filtered_categories', ''); // Default to empty string if not set
+    var_dump($filtered_categories_str);
+    if ($filtered_categories === null) {
+        $filtered_categories = $filtered_categories_str ? array_map('intval', explode(',', $filtered_categories_str)) : [];
+    }
+    //------------------------
+    //$filtered_categories = ['20'];
+    //$count = 10;
+    //------------------------
 
     // If $count is not provided, use the global settings
     if ($count === null) {
@@ -45,7 +53,10 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     }
 
     // Fetch products, the passed argument is the count limit and filtered categories
-    $products = $api->fetchProducts($count, $filtered_categories);
+    $products = $api->fetchProducts($count);
+
+    // Use the below function if category filteration is enabled in the settings
+    //$products = $api->fetchProducts($count, $filtered_categories);
 
     // Return products
     return $products;
@@ -90,20 +101,14 @@ function woorpd_display_products($atts = [])
     foreach ($products as $product) {
         echo '<div class="woorpd-product-card">';
 
-        if ($display_url) {
-            echo '<a href="' . esc_url($product["permalink"]) . '">';
-        }
-
+        echo '<a href="' . esc_url($product["permalink"]) . '">';
         if ($display_image && isset($product['images'][0]['src'])) {
             $img_src = $product['images'][0]['src'];
             echo '<div class="image-container">';
             echo '<img src="' . esc_url($img_src) . '" alt="' . esc_attr($product["name"]) . '" class="woorpd-product-image">';
             echo '</div>';
         }
-
-        if ($display_url) {
-            echo '</a>';
-        }
+        echo '</a>';
 
         if ($display_name) {
             echo '<div class="woorpd-product-title">' . esc_html($product["name"]) . '</div>';
@@ -122,15 +127,11 @@ function woorpd_display_products($atts = [])
 
         // Check if price exists and show currency symbol accordingly
         if ($display_price && isset($product["price"])) {
-            $price_output = '';
-            if (!empty($product["price"])) {
-                $price_output = esc_html($product["price"]);
-            }
-            if ($currency_symbol === 'ر.س') {
-                $price_output .= ' ' . esc_html($currency_symbol);
-            } elseif (!empty($currency_symbol)) {
-                $price_output = esc_html($currency_symbol) . ' ' . $price_output;
-            }
+
+            $price_output = $product["price"]  ? esc_html($product["price"]) : '';
+            $price_output = ($currency_symbol === 'ر.س') ?
+                $price_output . ' ' . esc_html($currency_symbol) :
+                esc_html($currency_symbol) . $price_output;
             echo '<div class="woorpd-product-price">' . $price_output . '</div>';
         }
 

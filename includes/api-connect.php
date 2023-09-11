@@ -22,15 +22,10 @@ class WooRPDLogger
      */
     public function log(string $message, string $type = 'INFO', array $data = []): ?array
     {
-
         if (WP_DEBUG && WP_DEBUG_LOG) {
             $message = ($type === 'INFO' && !empty($data)) ? "$message " . json_encode($data) : $message;
-
-
             error_log("WooRPD [$type]: $message");
         }
-
-
         return $type === 'ERROR' ? ['error' => $message] : null;
     }
 }
@@ -43,16 +38,14 @@ class WooRPDLogger
 class WooRPDRemoteAPI
 {
     private const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
-    private const MAX_PER_PAGE = 100; // Max allowed by WooCommerce by default
     private const WOORPD_RATE_LIMIT_KEY = "WOORPD_RATE_LIMIT_KEY";
-    private const MINUTE_IN_SECONDS = 60; // Define a constant for 60 seconds
 
     private $website_url;
     private $consumer_key;
     private $consumer_secret;
     private $logger;
 
-    private $cache_duration = 3600; // 60 minutes
+    private $cache_duration = 3600; // 1 hour (3600)
     private $rate_limit = 5; // 5 requests per minute
     private $timeout = 15; // 15 seconds
 
@@ -65,6 +58,9 @@ class WooRPDRemoteAPI
     {
         $this->logger = $logger;
         $this->initializeRateLimit();
+        if ($this->logger) {
+            $this->logger->log("WooRPD initialized.", 'INFO');
+        }
     }
 
     /**
@@ -108,7 +104,7 @@ class WooRPDRemoteAPI
     private function initializeRateLimit(): void
     {
         if (!get_transient(self::WOORPD_RATE_LIMIT_KEY)) {
-            set_transient(self::WOORPD_RATE_LIMIT_KEY, 0, self::MINUTE_IN_SECONDS);
+            set_transient(self::WOORPD_RATE_LIMIT_KEY, 0, $this->cache_duration);
         }
     }
 
@@ -142,6 +138,7 @@ class WooRPDRemoteAPI
         global $wpdb;
         $like_pattern = $wpdb->esc_like('_transient_woorpd_') . '%';
         $wpdb->query($wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s", $like_pattern));
+        $this->logger->log("Cached is flushed", 'INFO');
     }
 
     /**
@@ -170,14 +167,22 @@ class WooRPDRemoteAPI
     private function makeRequest(string $endpoint, array $args = []): array
     {
         $constructed_url = esc_url_raw($this->website_url . "/" . $endpoint . "?" . http_build_query($args));
-
-        // Generate a cache key based on the URL
         $cache_key = "woorpd_" . md5($constructed_url);
+
+        //------------------------
+        // For debug only
+        //var_dump($constructed_url);
+        //------------------------
+
 
         // Check if the response is cached
         if ($cached_response = get_transient($cache_key)) {
+            $this->logger->log("Transient $cache_key RETRIEVED successfully.", 'INFO');
             return $cached_response;
         }
+
+        // If the transient doesn't exist, log the new connection
+        $this->logger->log("Connecting to $this->website_url", 'INFO');
 
         // Rate limiting
         $current_requests = get_transient(self::WOORPD_RATE_LIMIT_KEY) ?: 0;
@@ -190,7 +195,6 @@ class WooRPDRemoteAPI
         if (is_wp_error($response)) {
             return $this->handleError("API request timed out: " . $response->get_error_message());
         }
-        delete_transient($cache_key);
 
         // Decode the response
         $decoded_response = json_decode(wp_remote_retrieve_body($response), true);
@@ -206,26 +210,40 @@ class WooRPDRemoteAPI
             return $this->handleError($error_message);
         }
 
-        // Cache the response and update the rate limiter count
+        // Cache the response and update the rate limiter count, fluch old cache if it exists
         if ($this->isCachingEnabled()) {
+            //$this->flushCache(); // For debug only
+            $this->logger->log("Transient $cache_key SET successfully.", 'INFO');
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
-        set_transient(self::WOORPD_RATE_LIMIT_KEY, $current_requests + 1, 60); // 1 minute
+        set_transient(self::WOORPD_RATE_LIMIT_KEY, $current_requests + 1, $this->rate_limit);
 
         return $decoded_response;
     }
 
-    public function fetchProducts(int $count_limit = 1, array $filtered_categories = []): array
+
+    public function fetchProducts(int $count_limit = 20, array $filtered_categories = []): array
     {
+        //------------------------
+        // For debug only
+        var_dump($filtered_categories);
+        var_dump(array_map('intval', $filtered_categories));
+        var_dump(implode(',', array_map('intval', $filtered_categories)));
+        //------------------------
+
+
         $args = [
-            'per_page' => self::MAX_PER_PAGE,
-            'category' => implode(',', array_map('intval', $filtered_categories)),
+            'per_page' => 100, // Max allowed by WooCommerce by default (100)
             'orderby' => 'date',
-            'order' => 'desc',
+            'order' => 'asc',
             'status' => 'publish',
             'consumer_key' => $this->consumer_key,
             'consumer_secret' => $this->consumer_secret
         ];
+
+        if (!empty($filtered_categories)) {
+            $args['category'] = implode(',', array_map('intval', $filtered_categories));
+        }
 
         $all_products = [];
         $page = 1;
@@ -239,15 +257,12 @@ class WooRPDRemoteAPI
                 return $products;
             }
 
-            // Update pages for INFO Log 
-            $log_data = [
-                'pages' => $page,
-                'products' => $count_limit,
-                'categories' => $filtered_categories
-            ];
-
             // Log the INFO messages only if there is no error and if the logger is enabled
-            $this->logger?->log("Successfully connected to the WooCommerce API at $this->website_url and fetching products.", 'INFO', $log_data);
+            $logMessage = "[Global] found pages: $page, products limit: $count_limit";
+            if (!empty($filtered_categories)) {
+                $logMessage .= ", filtered category IDs: " . implode(',', $filtered_categories);
+            }
+            $this->logger?->log($logMessage, 'INFO');
 
             // Filter products based on catalog_visibility 
             $filtered_visibility = array_filter($products, fn ($product) => !isset($product['catalog_visibility']) || $product['catalog_visibility'] === 'visible');
