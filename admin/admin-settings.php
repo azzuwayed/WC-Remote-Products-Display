@@ -65,18 +65,35 @@ add_action('admin_init', function(){
     }
 });
 
-function woorpd_admin_page_callback() {
+function woorpd_admin_page_callback() 
+{
     $nonce = wp_create_nonce('woorpd_save_options_nonce');
     include plugin_dir_path(__FILE__) . 'admin-template.php';
 }
 
-add_action('admin_menu', function() {
+add_action('admin_menu', function () {
     add_menu_page('WooRPD Settings', 'WooRPD', 'manage_options', 'woorpd_settings', 'woorpd_admin_page_callback', 'dashicons-cover-image', 100);
 });
 
-function save_woorpd_options() {
+function save_woorpd_options()
+{
+    // Access the global variable
     global $woorpd_settings;
 
+    error_log(print_r($woorpd_settings, true));
+    
+    // Validate that $woorpd_settings is an array
+    if (!is_array($woorpd_settings)) {
+        wp_send_json_error('Invalid settings');
+        exit;
+    }
+
+    // Check the nonce for security
+    if (!isset($_POST['woorpd_save_options_nonce']) || !wp_verify_nonce($_POST['woorpd_save_options_nonce'], 'woorpd_save_options_nonce')) {
+        wp_send_json_error('Nonce verification failed');
+        exit;
+    }
+    
     if (!current_user_can('manage_options')) {
         wp_send_json_error('You do not have sufficient permissions to access this page.');
         return;
@@ -84,17 +101,29 @@ function save_woorpd_options() {
 
     check_admin_referer('woorpd_save_options_nonce', 'nonce');
 
+    // Loop through each option to update it
+
     foreach ($woorpd_settings as $option_name => $sanitize_callback) {
-        $value = $_POST[$option_name] ?? null;
-        update_option($option_name, call_user_func($sanitize_callback, $value));
+        if (isset($_POST[$option_name])) {
+            $value = $_POST[$option_name] ?? null;
+            update_option($option_name, call_user_func($sanitize_callback, $value));
+        } else {
+
+            wp_send_json_error("Option name $option_name is missing");
+            wp_die();  // Stop further execution
+        }
     }
 
+    // If everything went well, send a success response
     wp_send_json_success();
 }
 
+// Attach the function to the wp_ajax_{action} hook
 add_action('wp_ajax_save_woorpd_options', 'save_woorpd_options');
 
-function woorpd_delete_options() {
+
+function woorpd_delete_options()
+{
     global $woorpd_settings;
 
     if (!current_user_can('manage_options')) {
@@ -113,7 +142,8 @@ function woorpd_delete_options() {
 
 add_action('wp_ajax_woorpd_delete_options', 'woorpd_delete_options');
 
-function woorpd_enqueue_admin_assets() {
+function woorpd_enqueue_admin_assets()
+{
     wp_enqueue_style('woorpd-admin-style', plugins_url('css/admin-style.css', __FILE__));
     wp_enqueue_script('woorpd-admin-script', plugins_url('js/admin-script.js', __FILE__), ['jquery'], '1.0.0', true);
     wp_localize_script('woorpd-admin-script', 'woorpd_ajax_object', ['ajax_url' => admin_url('admin-ajax.php')]);

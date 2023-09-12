@@ -33,18 +33,21 @@ function generate_checkbox_field($setting_name, $display_text) {
                 <label for="woorpd_api_woo_url">Remote WooCommerce URL:</label>
                 <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_url"></div>
+                <div class="server-error-feedback" data-for="woorpd_api_woo_url"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_ck">Consumer Key:</label>
                 <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_ck"></div>
+                <div class="server-error-feedback" data-for="woorpd_api_woo_ck"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_cs">Consumer Secret:</label>
                 <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_cs"></div>
+                <div class="server-error-feedback" data-for="woorpd_api_woo_cs"></div> <!-- Server-side Error Message -->
             </div>
 
             <input type="hidden" name="nonce" value="<?php echo $nonce; ?>">

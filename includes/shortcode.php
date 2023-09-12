@@ -12,10 +12,10 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     $apiwoocs  = get_option('woorpd_api_woo_cs');
 
     // Create a logger instance
-    // $logger = new WooRPDLogger();
+    $logger = new WooRPDLogger();
 
     // Create an API instance with the logger
-    $api = new WooRPDRemoteAPI();
+    $api = new WooRPDRemoteAPI($logger);
 
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
