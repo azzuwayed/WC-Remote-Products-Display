@@ -16,14 +16,14 @@ function openTab(tabName, elmnt) {
     elmnt.classList.add("active");
 }
 
-(function($) {
+(function ($) {
     // Set the default tab to be displayed
     openTab('API Connection', $('.tablink[data-tab="API Connection"]')[0]);
 
     // Form validation
-    $('#api-connection-settings-form').on('submit', function(e) {
+    $('#api-connection-settings-form').on('submit', function (e) {
         let isValid = true;
-        $(this).find('input[required]').each(function() {
+        $(this).find('input[required]').each(function () {
             if (!$(this).val()) {
                 isValid = false;
                 const fieldName = $(this).attr('id');
@@ -42,7 +42,7 @@ function openTab(tabName, elmnt) {
         }
     });
     // AJAX for saving API Connection settings
-    $('#api-connection-settings-form').on('submit', function(e) {
+    $('#api-connection-settings-form').on('submit', function (e) {
         e.preventDefault();
 
         // Show spinner and disable save button
@@ -59,7 +59,7 @@ function openTab(tabName, elmnt) {
                 obj[item.name] = item.value;
                 return obj;
             }, {})
-        }, function(response) {
+        }, function (response) {
             // Hide spinner, show checkmark, and re-enable save button
             $('.save-spinner').hide();
             if (response.success) {
@@ -72,21 +72,21 @@ function openTab(tabName, elmnt) {
         });
     });
     // AJAX for resetting API Connection settings
-    $('#woorpd-reset-settings-button').on('click', function(e) {
+    $('#woorpd-reset-settings-button').on('click', function (e) {
         e.preventDefault();
 
         // Hide any previous error messages
         $('.error-message').text('').removeClass('has-error');
 
         $.post(woorpd_ajax_object.ajax_url, {
-            action: 'reset_woorpd_options',
+            action: 'woorpd_delete_options',
             nonce: $('input[name="nonce"]').val()
-        }, function(response) {
+        }, function (response) {
             if (response.success) {
                 // Clear the form fields and show a success message
-                $('input[name="api-woo-url"]').val('');
-                $('input[name="api-woo-ck"]').val('');
-                $('input[name="api-woo-cs"]').val('');
+                $('input[name="woorpd_api_woo_url"]').val('');
+                $('input[name="woorpd_api_woo_ck"]').val('');
+                $('input[name="woorpd_api_woo_cs"]').val('');
             } else {
                 // Display the error message and show the error icon
                 $('.error-message').text('An error occurred: ' + response.data).addClass('has-error');

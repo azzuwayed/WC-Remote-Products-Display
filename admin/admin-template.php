@@ -1,3 +1,14 @@
+<?php 
+function generate_checkbox_field($setting_name, $display_text) {
+  ?>
+  <label for="<?php echo $setting_name; ?>" class="woordp-mn-top">
+    <input type="checkbox" id="<?php echo $setting_name; ?>" name="<?php echo $setting_name; ?>" value="1" <?php checked(1, get_option($setting_name), true); ?>>
+    <?php echo $display_text; ?>
+  </label>
+  <?php
+}
+?>
+
 <div class="wrap woorpd-settings-wrap">
     <header>
         <h2><i class="dashicons dashicons-admin-generic"></i> WooCommerce Remote Products Display</h2>
@@ -19,21 +30,21 @@
         <!-- Form for API Connection Settings -->
         <form id="api-connection-settings-form">
             <div class="form-group">
-                <label for="api-woo-url">Remote WooCommerce URL:</label>
-                <input type="text" id="api-woo-url" name="api-woo-url" value="<?php echo esc_attr(get_option('api-woo-url')); ?>" required>
-                <div class="error-feedback" data-for="api-woo-url"></div>
+                <label for="woorpd_api_woo_url">Remote WooCommerce URL:</label>
+                <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url')); ?>" required>
+                <div class="error-feedback" data-for="woorpd_api_woo_url"></div>
             </div>
 
             <div class="form-group">
-                <label for="api-woo-ck">Consumer Key:</label>
-                <input type="text" id="api-woo-ck" name="api-woo-ck" value="<?php echo esc_attr(get_option('api-woo-ck')); ?>" required>
-                <div class="error-feedback" data-for="api-woo-ck"></div>
+                <label for="woorpd_api_woo_ck">Consumer Key:</label>
+                <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck')); ?>" required>
+                <div class="error-feedback" data-for="woorpd_api_woo_ck"></div>
             </div>
 
             <div class="form-group">
-                <label for="api-woo-cs">Consumer Secret:</label>
-                <input type="text" id="api-woo-cs" name="api-woo-cs" value="<?php echo esc_attr(get_option('api-woo-cs')); ?>" required>
-                <div class="error-feedback" data-for="api-woo-cs"></div>
+                <label for="woorpd_api_woo_cs">Consumer Secret:</label>
+                <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs')); ?>" required>
+                <div class="error-feedback" data-for="woorpd_api_woo_cs"></div>
             </div>
 
             <input type="hidden" name="nonce" value="<?php echo $nonce; ?>">
@@ -55,62 +66,52 @@
     </section>
 
     <section id="Display" class="tabcontent">
-        <!-- Form for Display Settings -->
-        <form id="advanced-settings-form">
-            <!-- 1. Label heading and description -->
-            <label>
-                Advanced Option 1:
-                <p class="description">Description for Advanced Option 1.</p>
-                <input type="text" name="advanced_option1">
-            </label>
-
-            <!-- 2. Dropdown list with three options with Label heading and description -->
-            <label>
-                Select Option:
-                <p class="description">Choose one of the options from the dropdown.</p>
-                <select name="dropdown_option">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                </select>
-            </label>
-
-            <!-- 3. Multiple select box with five options with Label heading and description -->
-            <label>
-                Multiple Select:
-                <p class="description">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</p>
-                <select multiple name="multiple_select[]" size="5">
-                    <option value="multi_option1">Multi Option 1</option>
-                    <option value="multi_option2">Multi Option 2</option>
-                    <option value="multi_option3">Multi Option 3</option>
-                    <option value="multi_option4">Multi Option 4</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                    <option value="multi_option5">Multi Option 5</option>
-                </select>
-            </label>
-
-            <!-- 4. Input field with Label heading and description -->
-            <label>
-                Advanced Input:
-                <p class="description">Enter the value for the advanced input field.</p>
-                <input type="text" name="advanced_input">
-            </label>
-
-            <!-- 5. Grouped checkboxes with Label heading and description -->
+        <form id="display-settings-form">
             <fieldset>
-                <legend>Checkbox Group:</legend>
-                <p class="description">Select one or more checkboxes from the group.</p>
-                <label><input type="checkbox" name="checkbox_group[]" value="checkbox1"> Checkbox 1</label>
-                <label><input type="checkbox" name="checkbox_group[]" value="checkbox2"> Checkbox 2</label>
-                <label><input type="checkbox" name="checkbox_group[]" value="checkbox3"> Checkbox 3</label>
-                <label><input type="checkbox" name="checkbox_group[]" value="checkbox4"> Checkbox 4</label>
-                <label><input type="checkbox" name="checkbox_group[]" value="checkbox5"> Checkbox 5</label>
+                <legend>Product Card Elements</legend>
+                <p class="description">Select which product elemnts you would like to display on the card.</p>
+                <?php 
+                generate_checkbox_field('woorpd_display_image', 'Image');
+                generate_checkbox_field('woorpd_display_name', 'Name');
+                generate_checkbox_field('woorpd_display_category', 'Category');
+                generate_checkbox_field('woorpd_display_price', 'Price');
+                generate_checkbox_field('woorpd_display_description', 'Description');
+                generate_checkbox_field('woorpd_display_button', 'Button');
+                ?>
+            </fieldset>
+
+            <fieldset>
+            <legend>Global Display Settings</legend>
+            
+            <label class="woordp-mn-top">
+            Count limit
+            <p class="description">How many products to display per shortcode. This limit must be equal or grater than any shortcode.</p>
+            <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit')); ?>">
+            </label>
+            <hr>
+
+            <?php               
+            generate_checkbox_field('woorpd_display_filtered_categories', 'Filtered categories');
+            ?><label>
+            <p class="description red-color">When enabled, "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
+            </label>
+
+            <!-- This part about Category IDs needs development -->
+            <label class="woordp-mn-top">
+            Category IDs
+            <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" must be enabled.</p>    
+            <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids')); ?>">
+            </label>
+            <!-- This part about Category IDs needs development -->
+
+                <hr>
+                <legend class="woordp-mn-top">Instructions:</legend>
+                <p class="description">&#x2022; You can override glabal settings with shortcode attributes.</p>
+                <p class="description">&#x2022; Attributes are optional, and will default to global settings if not set.</p>
+                
+                <p class="description">Example: <b>[woordp count_limit="6"]</b> will display a maximum of 6 products.</p>
+                <p class="description">Example: <b>[woordp filtered_categories="1,2,3"]</b> will display products from these categories.</p>
+                <p class="description">Example: <b>[woordp count_limit="6" filtered_categories="1,2,3"] will apply both.</b></p>
             </fieldset>
 
             <div class="woorpd-save-container">

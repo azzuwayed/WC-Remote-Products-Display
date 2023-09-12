@@ -7,15 +7,15 @@ if (!defined('ABSPATH')) {
 
 function woorpd_get_products($count = null, $filtered_categories = null)
 {
-    $apiwoourl = get_option('api-woo-url');
-    $apiwoock  = get_option('api-woo-ck');
-    $apiwoocs  = get_option('api-woo-cs');
+    $apiwoourl = get_option('woorpd_api_woo_url');
+    $apiwoock  = get_option('woorpd_api_woo_ck');
+    $apiwoocs  = get_option('woorpd_api_woo_cs');
 
     // Create a logger instance
-    $logger = new WooRPDLogger();
+    // $logger = new WooRPDLogger();
 
     // Create an API instance with the logger
-    $api = new WooRPDRemoteAPI($logger);
+    $api = new WooRPDRemoteAPI();
 
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
@@ -23,11 +23,11 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     // Set cache duration, timeout, and rate limit (optional)
     $api->setCacheDuration(3600); // Cache for 1 hour (3600)
     $api->setTimeout(10); // Set timeout to 20 seconds
-    $api->setRateLimit(2); // Allow 10 requests per minute
+    $api->setRateLimit(1); // Allow 1 request per minute
 
     //----------------------------------------------------------------
     // During Development ONLY
-    $woorpd_dev  = 1;
+    $woorpd_dev  = 0;
     $host = $_SERVER['HTTP_HOST'];
     if (substr($host, -6) === '.local' && $woorpd_dev == 1) {
         $logger->log("DEVELOPMENT MODE IS ENABLED!", 'INFO');
@@ -37,26 +37,27 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     //----------------------------------------------------------------
 
     // If $filtered_categories is not provided, use the global settings
-    $filtered_categories_str = get_option('woorpd_global_filtered_categories', ''); // Default to empty string if not set
-    var_dump($filtered_categories_str);
+    $filtered_categories_str = get_option('woorpd_display_filtered_categories_ids', ''); // Default to empty string if not set
+    //var_dump($filtered_categories_str);
     if ($filtered_categories === null) {
         $filtered_categories = $filtered_categories_str ? array_map('intval', explode(',', $filtered_categories_str)) : [];
     }
-    //------------------------
-    //$filtered_categories = ['20'];
-    //$count = 10;
-    //------------------------
+
+    $enable_category_filter = get_option('woorpd_display_filtered_categories', false);
+    
+    // Check if category filtration is enabled and not null
+    if ($enable_category_filter !== null && $enable_category_filter) {
+        // Fetch products with category filtration
+        $products = $api->fetchProducts($count, $filtered_categories);
+    } else {
+        // Fetch products without category filtration
+        $products = $api->fetchProducts($count);
+    }
 
     // If $count is not provided, use the global settings
     if ($count === null) {
-        $count = get_option('woorpd_global_count_limit', 3); // Default to 3 if not set
+        $count = get_option('woorpd_display_count_limit', 3); // Default to 3 if not set
     }
-
-    // Fetch products, the passed argument is the count limit and filtered categories
-    $products = $api->fetchProducts($count);
-
-    // Use the below function if category filteration is enabled in the settings
-    //$products = $api->fetchProducts($count, $filtered_categories);
 
     // Return products
     return $products;
@@ -72,7 +73,7 @@ function woorpd_display_products($atts = [])
     $display_category = get_option('woorpd_display_category', true);
     $display_price = get_option('woorpd_display_price', true);
     $display_description = get_option('woorpd_display_description', true);
-    $display_url = get_option('woorpd_display_url', true);
+    $display_url = get_option('woorpd_display_button', true);
 
     // Retrieve user-defined currency symbol option (add this part)
     $user_currency_symbol = get_option('woorpd_currency_symbol', '$'); // Replace with the actual option name
@@ -102,8 +103,13 @@ function woorpd_display_products($atts = [])
         echo '<div class="woorpd-product-card">';
 
         echo '<a href="' . esc_url($product["permalink"]) . '">';
-        if ($display_image && isset($product['images'][0]['src'])) {
-            $img_src = $product['images'][0]['src'];
+        if ($display_image) {
+            if (isset($product['images'][0]['src']) && !empty($product['images'][0]['src'])) {
+                $img_src = $product['images'][0]['src'];
+            } else {
+                // Use the placeholder image if no image is available
+                $img_src = plugin_dir_url(__FILE__) . 'images/woorpd-placeholder.png';
+            }
             echo '<div class="image-container">';
             echo '<img src="' . esc_url($img_src) . '" alt="' . esc_attr($product["name"]) . '" class="woorpd-product-image">';
             echo '</div>';

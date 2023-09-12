@@ -1,91 +1,122 @@
 <?php
 
-// If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-    die('We\'re sorry, but you can not directly access this file.');
+defined('ABSPATH') or die('We\'re sorry, but you cannot directly access this file.');
+
+define('WOORPD_OPTIONS_GROUP', 'woorpd_options_group');
+
+function woorpd_initialize_settings() {
+    $default_settings = [
+        'woorpd_api_woo_url' => '',
+        'woorpd_api_woo_ck' => '',
+        'woorpd_api_woo_cs' => '',
+        'woorpd_display_image' => 'yes',
+        'woorpd_display_name' => 'yes',
+        'woorpd_display_category' => 'yes',
+        'woorpd_display_price' => 'yes',
+        'woorpd_display_description' => 'yes',
+        'woorpd_display_button' => 'yes',
+        'woorpd_display_count_limit' => 10,
+        'woorpd_display_filtered_categories' => '',
+        'woorpd_display_filtered_categories_ids' => '',
+        'woorpd_debug_cache_duration' => 3600,
+        'woorpd_debug_rate_limit' => 60,
+        'woorpd_debug_timeout' => 30,
+        'woorpd_debug_enable_logging' => 'no',
+    ];
+
+    foreach ($default_settings as $key => $value) {
+        update_option($key, get_option($key, $value));
+    }
 }
 
-// Add the admin page
-add_action('admin_menu', 'woorpd_add_admin_page');
-function woorpd_add_admin_page()
-{
-    add_menu_page('WooRPD Settings', 'WooRPD', 'manage_options', 'woorpd_settings', 'woorpd_admin_page_callback', 'dashicons-cover-image', 100);
-}
+register_activation_hook(__FILE__, 'woorpd_initialize_settings');
 
-// Admin page callback
-function woorpd_admin_page_callback()
-{
-    // Create a nonce for our AJAX request
+$woorpd_settings = [
+    'woorpd_api_woo_url' => 'sanitize_text_field',
+    'woorpd_api_woo_ck' => 'sanitize_text_field',
+    'woorpd_api_woo_cs' => 'sanitize_text_field',
+    'woorpd_display_image' => 'sanitize_text_field',
+    'woorpd_display_name' => 'sanitize_text_field',
+    'woorpd_display_category' => 'sanitize_text_field',
+    'woorpd_display_price' => 'sanitize_text_field',
+    'woorpd_display_description' => 'sanitize_text_field',
+    'woorpd_display_button' => 'sanitize_text_field',
+    'woorpd_display_count_limit' => 'intval',
+    'woorpd_display_filtered_categories' => 'sanitize_text_field',
+    'woorpd_display_filtered_categories_ids' => 'intval',
+    'woorpd_debug_cache_duration' => 'intval',
+    'woorpd_debug_rate_limit' => 'intval',
+    'woorpd_debug_timeout' => 'intval',
+    'woorpd_debug_enable_logging' => 'sanitize_text_field',
+];
+
+add_action('admin_init', function(){
+    global $woorpd_settings;
+
+    // Check if $woorpd_settings is not null and is an array
+    if (is_array($woorpd_settings)) {
+        foreach ($woorpd_settings as $setting_name => $sanitize_callback) {
+            register_setting(WOORPD_OPTIONS_GROUP, $setting_name, $sanitize_callback);
+        }
+    } else {
+        // Handle the case where $woorpd_settings is null or not an array
+        // You can log an error message or take other appropriate actions
+        error_log('Warning: $woorpd_settings is not an array.');
+    }
+});
+
+function woorpd_admin_page_callback() {
     $nonce = wp_create_nonce('woorpd_save_options_nonce');
     include plugin_dir_path(__FILE__) . 'admin-template.php';
 }
 
-// Register the options
-add_action('admin_init', 'woorpd_register_options');
-function woorpd_register_options()
-{
-    register_setting('woorpd_options_group', 'api-woo-url', 'sanitize_text_field');
-    register_setting('woorpd_options_group', 'api-woo-ck', 'sanitize_text_field');
-    register_setting('woorpd_options_group', 'api-woo-cs', 'sanitize_text_field');
-}
+add_action('admin_menu', function() {
+    add_menu_page('WooRPD Settings', 'WooRPD', 'manage_options', 'woorpd_settings', 'woorpd_admin_page_callback', 'dashicons-cover-image', 100);
+});
 
-//----------------------------------------------------------------
-// AJAX callback for saving options
-add_action('wp_ajax_save_woorpd_options', 'save_woorpd_options');
-function save_woorpd_options()
-{
-    // Check if the user has the right capabilities
+function save_woorpd_options() {
+    global $woorpd_settings;
+
     if (!current_user_can('manage_options')) {
         wp_send_json_error('You do not have sufficient permissions to access this page.');
         return;
     }
 
-    // Check for nonce validation
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'woorpd_save_options_nonce')) {
-        wp_send_json_error('Nonce verification failed.');
-        return;
+    check_admin_referer('woorpd_save_options_nonce', 'nonce');
+
+    foreach ($woorpd_settings as $option_name => $sanitize_callback) {
+        $value = $_POST[$option_name] ?? null;
+        update_option($option_name, call_user_func($sanitize_callback, $value));
     }
 
-    // Save the options
-    update_option('api-woo-url', sanitize_text_field($_POST['api-woo-url']));
-    update_option('api-woo-ck', sanitize_text_field($_POST['api-woo-ck']));
-    update_option('api-woo-cs', sanitize_text_field($_POST['api-woo-cs']));
-
-    // Send a success response
     wp_send_json_success();
 }
 
-// AJAX callback for resetting options
-add_action('wp_ajax_reset_woorpd_options', 'reset_woorpd_options');
-function reset_woorpd_options()
-{
-    // Check if the user has the right capabilities
+add_action('wp_ajax_save_woorpd_options', 'save_woorpd_options');
+
+function woorpd_delete_options() {
+    global $woorpd_settings;
+
     if (!current_user_can('manage_options')) {
         wp_send_json_error('You do not have sufficient permissions to access this page.');
         return;
     }
 
-    // Check for nonce validation
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'woorpd_save_options_nonce')) {
-        wp_send_json_error('Nonce verification failed.');
-        return;
+    check_admin_referer('woorpd_save_options_nonce', 'nonce');
+
+    foreach (array_keys($woorpd_settings) as $option_name) {
+        delete_option($option_name);
     }
 
-    // Delete the options
-    delete_option('api-woo-url');
-    delete_option('api-woo-ck');
-    delete_option('api-woo-cs');
-
-    // Send a success response
     wp_send_json_success('Options reset successfully.');
 }
-//----------------------------------------------------------------
 
-// Enqueue scripts and styles
-add_action('admin_enqueue_scripts', 'woorpd_enqueue_admin_scripts');
-function woorpd_enqueue_admin_scripts()
-{
+add_action('wp_ajax_woorpd_delete_options', 'woorpd_delete_options');
+
+function woorpd_enqueue_admin_assets() {
     wp_enqueue_style('woorpd-admin-style', plugins_url('css/admin-style.css', __FILE__));
-    wp_enqueue_script('woorpd-admin-script', plugins_url('js/admin-script.js', __FILE__), array('jquery'), '1.0.0', true);
-    wp_localize_script('woorpd-admin-script', 'woorpd_ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_enqueue_script('woorpd-admin-script', plugins_url('js/admin-script.js', __FILE__), ['jquery'], '1.0.0', true);
+    wp_localize_script('woorpd-admin-script', 'woorpd_ajax_object', ['ajax_url' => admin_url('admin-ajax.php')]);
 }
+
+add_action('admin_enqueue_scripts', 'woorpd_enqueue_admin_assets');

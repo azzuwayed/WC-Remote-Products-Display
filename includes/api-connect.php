@@ -177,12 +177,12 @@ class WooRPDRemoteAPI
 
         // Check if the response is cached
         if ($cached_response = get_transient($cache_key)) {
-            $this->logger->log("Transient $cache_key RETRIEVED successfully.", 'INFO');
+            $this->logger?->log("Transient $cache_key RETRIEVED successfully.", 'INFO');
             return $cached_response;
         }
 
         // If the transient doesn't exist, log the new connection
-        $this->logger->log("Connecting to $this->website_url", 'INFO');
+        $this->logger?->log("Connecting to $this->website_url", 'INFO');
 
         // Rate limiting
         $current_requests = get_transient(self::WOORPD_RATE_LIMIT_KEY) ?: 0;
@@ -213,7 +213,7 @@ class WooRPDRemoteAPI
         // Cache the response and update the rate limiter count, fluch old cache if it exists
         if ($this->isCachingEnabled()) {
             //$this->flushCache(); // For debug only
-            $this->logger->log("Transient $cache_key SET successfully.", 'INFO');
+            $this->logger?->log("Transient $cache_key SET successfully.", 'INFO');
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
         set_transient(self::WOORPD_RATE_LIMIT_KEY, $current_requests + 1, $this->rate_limit);
@@ -222,20 +222,20 @@ class WooRPDRemoteAPI
     }
 
 
-    public function fetchProducts(int $count_limit = 20, array $filtered_categories = []): array
+    public function fetchProducts(int $count_limit = 3, array $filtered_categories = []): array
     {
         //------------------------
         // For debug only
-        var_dump($filtered_categories);
-        var_dump(array_map('intval', $filtered_categories));
-        var_dump(implode(',', array_map('intval', $filtered_categories)));
+        //var_dump($filtered_categories);
+        //var_dump(array_map('intval', $filtered_categories));
+        //var_dump(implode(',', array_map('intval', $filtered_categories)));
         //------------------------
 
 
         $args = [
             'per_page' => 100, // Max allowed by WooCommerce by default (100)
             'orderby' => 'date',
-            'order' => 'asc',
+            'order' => 'desc',
             'status' => 'publish',
             'consumer_key' => $this->consumer_key,
             'consumer_secret' => $this->consumer_secret

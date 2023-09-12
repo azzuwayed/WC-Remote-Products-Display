@@ -92,16 +92,16 @@
     margin-top: 5px;
 }
 
-.woorpd-save-container{
+.woorpd-save-container {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     margin-top: 15px;
 }
 
 .woorpd-right-buttons {
     display: flex;
-    gap: 5px; 
+    gap: 5px;
 }
 
 /* Save button styles */
@@ -183,14 +183,6 @@
     box-shadow: 0px 0px 5px rgba(231, 76, 60, 0.3);
 }
 
-.red-color{
-color: #e74c3c;
-}
-
-.green-color{
-color:green;
-}
-
 .woorpd-settings-wrap .error-message:before {
     content: '\f488';
     font-family: "dashicons";
@@ -203,7 +195,7 @@ color:green;
     display: inline-block;
 }
 
-.right-btn{
+.right-btn {
     margin-left: 10px;
 }
 
@@ -211,7 +203,7 @@ color:green;
 .woorpd-settings-wrap .description {
     font-size: 12px;
     color: #777;
-    margin: 5px 0; 
+    margin: 5px 0;
 }
 
 /* Dropdown & Multiple Select styles */
@@ -264,7 +256,27 @@ color:green;
     background-color: #e2e4e7;
 }
 
-.woorpd-settings-wrap .dashicons-admin-generic:before{
+.woorpd-settings-wrap .dashicons-admin-generic:before {
     font-size: 30px;
     line-height: 0.7;
+}
+
+.red-color {
+    color: #e74c3c !important;
+}
+
+.green-color {
+    color: green !important;
+}
+
+.woordp-mn-top {
+    margin-top: 20px;
+}
+
+.woordp-mn-btm {
+    margin-bottom: 20px;
+}
+
+.tabcontent hr {
+    margin-top: 20px;
 }
