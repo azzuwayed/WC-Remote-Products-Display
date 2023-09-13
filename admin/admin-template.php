@@ -1,14 +1,3 @@
-<?php 
-function generate_checkbox_field($setting_name, $display_text) {
-  ?>
-  <label for="<?php echo $setting_name; ?>" class="woordp-mn-top">
-    <input type="checkbox" id="<?php echo $setting_name; ?>" name="<?php echo $setting_name; ?>" value="1" <?php checked(1, get_option($setting_name), true); ?>>
-    <?php echo $display_text; ?>
-  </label>
-  <?php
-}
-?>
-
 <div class="wrap woorpd-settings-wrap">
     <header>
         <h2><i class="dashicons dashicons-admin-generic"></i> WooCommerce Remote Products Display</h2>
@@ -72,30 +61,55 @@ function generate_checkbox_field($setting_name, $display_text) {
         <form id="display-settings-form">
             <fieldset>
                 <legend>Product Card Elements</legend>
-                <p class="description">Select which product elemnts you would like to display on the card.</p>
-                <?php 
-                generate_checkbox_field('woorpd_display_image', 'Image');
-                generate_checkbox_field('woorpd_display_name', 'Name');
-                generate_checkbox_field('woorpd_display_category', 'Category');
-                generate_checkbox_field('woorpd_display_price', 'Price');
-                generate_checkbox_field('woorpd_display_description', 'Description');
-                generate_checkbox_field('woorpd_display_button', 'Button');
-                ?>
+                <p class="description">Select which product elements you would like to display on the card.</p>
+                <!-- Image Checkbox -->
+                <label for="woorpd_display_image" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_image" name="woorpd_display_image" value="1" <?php checked(1, get_option('woorpd_display_image'), true); ?>>
+                    Image
+                </label>
+                <!-- Name Checkbox -->
+                <label for="woorpd_display_name" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_name" name="woorpd_display_name" value="1" <?php checked(1, get_option('woorpd_display_name'), true); ?>>
+                    Name
+                </label>
+                <!-- Category Checkbox -->
+                <label for="woorpd_display_category" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_category" name="woorpd_display_category" value="1" <?php checked(1, get_option('woorpd_display_category'), true); ?>>
+                    Category
+                </label>
+                <!-- Price Checkbox -->
+                <label for="woorpd_display_price" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_price" name="woorpd_display_price" value="1" <?php checked(1, get_option('woorpd_display_price'), true); ?>>
+                    Price
+                </label>
+                <!-- Description Checkbox -->
+                <label for="woorpd_display_description" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_description" name="woorpd_display_description" value="1" <?php checked(1, get_option('woorpd_display_description'), true); ?>>
+                    Description
+                </label>
+                <!-- Button Checkbox -->
+                <label for="woorpd_display_button" class="woordp-mn-top">
+                    <input type="checkbox" id="woorpd_display_button" name="woorpd_display_button" value="1" <?php checked(1, get_option('woorpd_display_button'), true); ?>>
+                    Button
+                </label>
             </fieldset>
-
             <fieldset>
             <legend>Global Display Settings</legend>
             
             <label class="woordp-mn-top">
             Count limit
-            <p class="description">How many products to display per shortcode. This limit must be equal or grater than any shortcode.</p>
+            <p class="description">How many products to display per shortcode. This limit must be equal or greater than any shortcode.</p>
             <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit')); ?>">
             </label>
             <hr>
 
-            <?php               
-            generate_checkbox_field('woorpd_display_filtered_categories', 'Filtered categories');
-            ?><label>
+            <!-- Filtered Categories Checkbox -->
+            <label for="woorpd_display_filtered_categories" class="woordp-mn-top">
+                <input type="checkbox" id="woorpd_display_filtered_categories" name="woorpd_display_filtered_categories" value="1" <?php checked(1, get_option('woorpd_display_filtered_categories'), true); ?>>
+                Filtered categories
+            </label>
+            
+            <label>
             <p class="description red-color">When enabled, "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
             </label>
 

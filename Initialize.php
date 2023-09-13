@@ -31,3 +31,42 @@ function woorpd_add_settings_link($links)
     array_unshift($links, $settings_link);  // This places the "Settings" link at the beginning
     return $links;
 }
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+// Enqueue admin assets
+function woorpd_enqueue_admin_assets($hook)
+{
+    // Check if we are on the plugin's settings page
+    if ($hook != 'toplevel_page_woorpd_settings') {
+        return;
+    }
+
+    // Register and enqueue admin styles
+    wp_register_style('woorpd-admin-style', plugins_url('admin/css/admin-style.css', __FILE__), [], '1.0.2');
+    wp_enqueue_style('woorpd-admin-style');
+
+    // Register and enqueue admin scripts
+    wp_register_script('woorpd-admin-script', plugins_url('admin/js/admin-script.js', __FILE__), ['jquery'], '1.0.2', true);
+    wp_enqueue_script('woorpd-admin-script');
+
+    // Localize script for AJAX
+    wp_localize_script('woorpd-admin-script', 'woorpd_ajax_object', ['ajax_url' => admin_url('admin-ajax.php')]);
+}
+add_action('admin_enqueue_scripts', 'woorpd_enqueue_admin_assets');
+
+// Enqueue frontend assets
+function woorpd_enqueue_scripts()
+{
+    // Register and enqueue frontend styles
+    wp_register_style('woorpd-product-display-styles', plugin_dir_url(__FILE__) . 'includes/css/woorpd-product-display-styles.css', [], '1.0.2');
+    wp_enqueue_style('woorpd-product-display-styles');
+
+    // Register and enqueue frontend scripts
+    wp_register_script('woorpd-product-display-scripts', plugin_dir_url(__FILE__) . 'includes/js/woorpd-product-display-scripts.js', ['jquery'], '1.0.2', true);
+    wp_enqueue_script('woorpd-product-display-scripts');
+
+    // Localize script for AJAX
+    wp_localize_script('woorpd-product-display-scripts', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
+}
+add_action('wp_enqueue_scripts', 'woorpd_enqueue_scripts');

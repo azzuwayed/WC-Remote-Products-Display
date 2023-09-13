@@ -76,3 +76,48 @@ function woorpd_include_files($filename)
 
 // Initialization and Setup
 woorpd_include_files('Initialize.php');
+
+// Initialize default settings
+function woorpd_initialize_settings() {
+    // Log the start of the function
+    error_log("Initializing WooRPD plugin settings...");
+
+    // Your default settings
+    $defaults = [
+        'woorpd_api_woo_url' => 'app.haracat.com',
+        'woorpd_api_woo_ck' => 'ck_4cc51d58e231a46d9bbe45ce8710bf7ac69decdc',
+        'woorpd_api_woo_cs' => 'cs_ae5609313e7cd111f569a9286ef4de74af8e3171',
+        'woorpd_display_image' => 'yes',
+        'woorpd_display_name' => 'yes',
+        'woorpd_display_category' => 'no',
+        'woorpd_display_price' => 'no',
+        'woorpd_display_description' => 'no',
+        'woorpd_display_button' => 'no',
+        'woorpd_display_count_limit' => 10,
+        'woorpd_display_filtered_categories' => 'no',
+        'woorpd_display_filtered_categories_ids' => '',
+        'woorpd_debug_cache_duration' => 3600,
+        'woorpd_debug_rate_limit' => 60,
+        'woorpd_debug_timeout' => 30,
+        'woorpd_debug_enable_logging' => 'no'
+    ];
+
+    // Loop through each setting to update it
+    foreach ($defaults as $key => $default_value) {
+        $current_value = get_option($key, $default_value);
+        update_option($key, $current_value);
+    }
+
+    // Log the end of the function
+    error_log("WooRPD plugin settings initialized.");
+}
+register_activation_hook(__FILE__, 'woorpd_initialize_settings');
+
+
+// Function to run when the plugin is deactivated
+function woorpd_deactivation_hook() {
+    // Log an informational message to the WordPress error log
+    error_log("WooRPD plugin has been deactivated.");
+}
+// Register the deactivation hook
+register_deactivation_hook(__FILE__, 'woorpd_deactivation_hook');

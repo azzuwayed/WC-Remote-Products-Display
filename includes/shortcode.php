@@ -161,14 +161,4 @@ function woorpd_display_products($atts = [])
     return ob_get_clean();
 }
 
-
 add_shortcode('woorpd', 'woorpd_display_products');
-
-// Enqueue the CSS and JS files
-function woorpd_enqueue_scripts()
-{
-    wp_enqueue_style('woorpd-product-display-styles', plugin_dir_url(__FILE__) . 'css/woorpd-product-display-styles.css');
-    wp_enqueue_script('woorpd-product-display-scripts', plugin_dir_url(__FILE__) . 'js/woorpd-product-display-scripts.js', array('jquery'), null, true);
-    wp_localize_script('woorpd-product-display-scripts', 'frontendajax', array('ajaxurl' => admin_url('admin-ajax.php')));
-}
-add_action('wp_enqueue_scripts', 'woorpd_enqueue_scripts');

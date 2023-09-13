@@ -258,7 +258,7 @@ class WooRPDRemoteAPI
             }
 
             // Log the INFO messages only if there is no error and if the logger is enabled
-            $logMessage = "[Global] found pages: $page, products limit: $count_limit";
+            $logMessage = "[Shortcode] found pages: $page, products limit: $count_limit";
             if (!empty($filtered_categories)) {
                 $logMessage .= ", filtered category IDs: " . implode(',', $filtered_categories);
             }
