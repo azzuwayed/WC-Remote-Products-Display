@@ -171,7 +171,7 @@ class WooRPDRemoteAPI
 
         //------------------------
         // For debug only
-        //var_dump($constructed_url);
+        // var_dump($constructed_url);
         //------------------------
 
 
@@ -198,8 +198,9 @@ class WooRPDRemoteAPI
 
         // Decode the response
         $decoded_response = json_decode(wp_remote_retrieve_body($response), true);
+
         if (!$decoded_response) {
-            return $this->handleError("Empty or invalid response from API. Is WooCommerce installed?");
+            return $this->handleError("Empty or invalid response from the remote API.");
         }
 
         // Handle potential API errors

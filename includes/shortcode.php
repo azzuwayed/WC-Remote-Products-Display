@@ -20,10 +20,30 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
 
-    // Set cache duration, timeout, and rate limit (optional)
-    $api->setCacheDuration(3600); // Cache for 1 hour (3600)
-    $api->setTimeout(10); // Set timeout to 20 seconds
-    $api->setRateLimit(1); // Allow 1 request per minute
+    // Validate and set cache duration 
+    $cacheDuration = get_option('woorpd_debug_cache_duration', 21600);
+    if ($cacheDuration !== null && $cacheDuration !== 0) {
+        $api->setCacheDuration(intval($cacheDuration));
+    } else {
+        $api->setCacheDuration(21600);
+    }
+
+    // Validate and set timeout 
+    $timeout = get_option('woorpd_debug_timeout', 20);
+    if ($timeout !== null && $timeout !== 0) {
+        $api->setTimeout(intval($timeout));
+    } else {
+        $api->setTimeout(20);
+    }
+
+    // Validate and set rate limit
+    $rateLimit = get_option('woorpd_debug_rate_limit', 10);
+    if ($rateLimit !== null && $rateLimit !== 0) {
+        $api->setRateLimit(intval($rateLimit));
+    } else {
+        $api->setRateLimit(10);
+    }
+
 
     //----------------------------------------------------------------
     // During Development ONLY
@@ -36,27 +56,21 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     }
     //----------------------------------------------------------------
 
-    // If $filtered_categories is not provided, use the global settings
-    $filtered_categories_str = get_option('woorpd_display_filtered_categories_ids', ''); // Default to empty string if not set
-    //var_dump($filtered_categories_str);
-    if ($filtered_categories === null) {
-        $filtered_categories = $filtered_categories_str ? array_map('intval', explode(',', $filtered_categories_str)) : [];
-    }
+    $products = [];
 
-    $enable_category_filter = get_option('woorpd_display_filtered_categories', false);
-    
-    // Check if category filtration is enabled and not null
-    if ($enable_category_filter !== null && $enable_category_filter) {
-        // Fetch products with category filtration
+    // Fetch enable filter flag
+    $enable_category_filter = get_option('woorpd_display_filtered_categories', '');
+
+    // Determine the count limit
+    $count = $count ?? get_option('woorpd_display_count_limit', 5);
+    $logger->log('The count limit is' . $count, 'INFO');
+
+    // Fetch products based on the conditions
+    if (!empty($enable_category_filter) && !empty($filtered_categories)) {
         $products = $api->fetchProducts($count, $filtered_categories);
     } else {
         // Fetch products without category filtration
         $products = $api->fetchProducts($count);
-    }
-
-    // If $count is not provided, use the global settings
-    if ($count === null) {
-        $count = get_option('woorpd_display_count_limit', 3); // Default to 3 if not set
     }
 
     // Return products
@@ -67,21 +81,22 @@ function woorpd_get_products($count = null, $filtered_categories = null)
 // Shortcode to loop and display fetched products as cards 
 function woorpd_display_products($atts = [])
 {
+
     // Retrieve global visibility settings
-    $display_image = get_option('woorpd_display_image', true);
-    $display_name = get_option('woorpd_display_name', true);
-    $display_category = get_option('woorpd_display_category', true);
-    $display_price = get_option('woorpd_display_price', true);
-    $display_description = get_option('woorpd_display_description', true);
-    $display_url = get_option('woorpd_display_button', true);
+    $display_image = get_option('woorpd_display_image', '');
+    $display_name = get_option('woorpd_display_name', '');
+    $display_category = get_option('woorpd_display_category', '');
+    $display_price = get_option('woorpd_display_price', '');
+    $display_description = get_option('woorpd_display_description', '');
+    $display_url = get_option('woorpd_display_button', '');
 
     // Retrieve user-defined currency symbol option (add this part)
-    $user_currency_symbol = get_option('woorpd_currency_symbol', '$'); // Replace with the actual option name
+    // $user_currency_symbol = get_option('woorpd_currency_symbol', '$'); // Replace with the actual option name
 
     // Extract the shortcode attributes
     $attributes = shortcode_atts([
-        'count_limit' => get_option('woorpd_global_count_limit', 3), // Default to global setting or 3
-        'filtered_categories' => get_option('woorpd_global_filtered_categories', '') // Default to global setting or empty string
+        'count_limit' => null,
+        'filtered_categories' => ''
     ], $atts);
 
     // Fetch products using the shortcode attributes to override the global settings
@@ -91,6 +106,8 @@ function woorpd_display_products($atts = [])
     if (isset($response['error'])) {
         return '<div class="woorpd-error">' . esc_html($response['error']) . '</div>';
     }
+
+    error_log('Filtered Categories from Shortcode: ' . print_r($attributes['filtered_categories'], true));
 
     $products = $response['data'];
 
@@ -134,11 +151,19 @@ function woorpd_display_products($atts = [])
         // Check if price exists and show currency symbol accordingly
         if ($display_price && isset($product["price"])) {
 
-            $price_output = $product["price"]  ? esc_html($product["price"]) : '';
-            $price_output = ($currency_symbol === 'ر.س') ?
-                $price_output . ' ' . esc_html($currency_symbol) :
-                esc_html($currency_symbol) . $price_output;
-            echo '<div class="woorpd-product-price">' . $price_output . '</div>';
+            $price_output = $product["price"] ? esc_html($product["price"]) : '';
+
+            // Adjust the position of the currency symbol based on its value
+            if ($currency_symbol === 'ر.س') {
+                $price_output = $price_output . ' ' . esc_html($currency_symbol);
+            } else {
+                $price_output = esc_html($currency_symbol) . $price_output;
+            }
+
+            // Only echo the div if $price_output is not empty
+            if (!empty($price_output)) {
+                echo '<div class="woorpd-product-price">' . $price_output . '</div>';
+            }
         }
 
         if ($display_description) {

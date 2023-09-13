@@ -78,7 +78,8 @@ function woorpd_include_files($filename)
 woorpd_include_files('Initialize.php');
 
 // Initialize default settings
-function woorpd_initialize_settings() {
+function woorpd_initialize_settings()
+{
     // Log the start of the function
     error_log("Initializing WooRPD plugin settings...");
 
@@ -89,16 +90,16 @@ function woorpd_initialize_settings() {
         'woorpd_api_woo_cs' => 'cs_ae5609313e7cd111f569a9286ef4de74af8e3171',
         'woorpd_display_image' => 'yes',
         'woorpd_display_name' => 'yes',
-        'woorpd_display_category' => 'no',
-        'woorpd_display_price' => 'no',
-        'woorpd_display_description' => 'no',
-        'woorpd_display_button' => 'no',
-        'woorpd_display_count_limit' => 10,
-        'woorpd_display_filtered_categories' => 'no',
+        'woorpd_display_category' => 'yes',
+        'woorpd_display_price' => 'yes',
+        'woorpd_display_description' => 'yes',
+        'woorpd_display_button' => 'yes',
+        'woorpd_display_count_limit' => 3,
+        'woorpd_display_filtered_categories' => 'yes',
         'woorpd_display_filtered_categories_ids' => '',
-        'woorpd_debug_cache_duration' => 3600,
-        'woorpd_debug_rate_limit' => 60,
-        'woorpd_debug_timeout' => 30,
+        'woorpd_debug_cache_duration' => 21600,
+        'woorpd_debug_timeout' => 20,
+        'woorpd_debug_rate_limit' => 10,
         'woorpd_debug_enable_logging' => 'no'
     ];
 
@@ -115,7 +116,8 @@ register_activation_hook(__FILE__, 'woorpd_initialize_settings');
 
 
 // Function to run when the plugin is deactivated
-function woorpd_deactivation_hook() {
+function woorpd_deactivation_hook()
+{
     // Log an informational message to the WordPress error log
     error_log("WooRPD plugin has been deactivated.");
 }

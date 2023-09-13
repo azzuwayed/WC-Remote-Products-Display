@@ -38,7 +38,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
-    /*filter: blur(3.5rem);*/
+    filter: blur(3.5rem);
 }
 
 .woorpd-product-card .image-container img:hover {
@@ -184,6 +184,7 @@
     color: #fff;
     text-decoration: none;
     text-align: center;
+    margin-top: auto;
 }
 
 .woorpd-shop-now-button:hover {
