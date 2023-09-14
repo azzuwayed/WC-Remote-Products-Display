@@ -149,6 +149,12 @@ function handle_display_form_submission() {
 function woorpd_reset_plugin() {
 do_action('woorpd_reset_everything');
 WooRPDSettings::woorpd_initialize_settings();
+add_action('admin_notices', static function (): void {
+    echo wp_kses_post(
+        sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+            __('All cache, transients, and options have been reset.', 'woorpd'))
+    );
+});
 }
 
 /**
@@ -156,6 +162,12 @@ WooRPDSettings::woorpd_initialize_settings();
  */
 function woorpd_flush_cache() {
 do_action('woorpd_flush_cache');
+add_action('admin_notices', static function (): void {
+    echo wp_kses_post(
+        sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+            __('All cache and transients have been flushed.', 'woorpd'))
+    );
+});
 }
 
 /**

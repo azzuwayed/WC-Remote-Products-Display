@@ -23,13 +23,6 @@ class WooRPDUtilities
     {
         self::flushCache();
         self::deleteAllOptions();
-
-        add_action('admin_notices', static function (): void {
-            echo wp_kses_post(
-                sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                    __('All cache, transients, and options have been reset.', 'woorpd'))
-            );
-        });
     }
 
     /**
@@ -41,13 +34,6 @@ class WooRPDUtilities
         delete_transient('woorpd_api_rate_limit');
         self::deleteAPIRequestCache();
         self::deleteRateLimitAndTimeoutTransients();
-
-        add_action('admin_notices', static function (): void {
-            echo wp_kses_post(
-                sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                    __('All cache and transients have been flushed.', 'woorpd'))
-            );
-        });
     }
 
     /**
