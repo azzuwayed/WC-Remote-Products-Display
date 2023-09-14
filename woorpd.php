@@ -9,7 +9,7 @@
  *
  * Plugin Name:     WooCommerce Remote Products Display
  * Plugin URI:      https://azzuwayed.com/woorpd
- * Description:     WooRPD fetches products from a remote website using WooCommerce webhooks then displays them using the shortcode [woordpd] anywhere in your posts and pages.
+ * Description:     WooRPD fetches products from a remote website using WooCommerce webhooks then displays them using the shortcode [woorpdd] anywhere in your posts and pages.
  * Version:         1.0.0
  * Author:          Abdullah Alzuwayed
  * Author URI:      https://azzuwayed.com 
@@ -64,7 +64,8 @@ if (version_compare(PHP_VERSION, WOORPD_MIN_PHP_VERSION, '<=')) {
 }
 
 // Initialize default settings. To call it globally: WooRPDSettings::woorpd_initialize_settings();
-class WooRPDSettings {
+class WooRPDSettings
+{
     public static function woorpd_initialize_settings()
     {
         $defaults = [
@@ -81,8 +82,8 @@ class WooRPDSettings {
             'woorpd_display_filtered_categories' => '',
             'woorpd_display_filtered_categories_ids' => '',
             'woorpd_debug_cache_duration' => 21600,
-            'woorpd_debug_timeout' => 20,
-            'woorpd_debug_rate_limit' => 10,
+            'woorpd_debug_timeout' => 10,
+            'woorpd_debug_rate_limit' => 30,
             'woorpd_debug_enable_logging' => ''
         ];
 
@@ -93,15 +94,7 @@ class WooRPDSettings {
         }
     }
 }
-register_activation_hook(__FILE__, 'woorpd_initialize_settings');
-
-// Function to run when the plugin is deactivated
-function woorpd_deactivation_hook()
-{
-
-}
-// Register the deactivation hook
-register_deactivation_hook(__FILE__, 'woorpd_deactivation_hook');
+register_activation_hook(__FILE__, [WooRPDSettings::class, 'woorpd_initialize_settings']);
 
 // Include required files
 function woorpd_include_files($filename)
@@ -117,3 +110,11 @@ function woorpd_include_files($filename)
 // Initialization and Setup
 woorpd_include_files('includes/utilities.php');
 woorpd_include_files('initialize.php');
+
+// Function to run when the plugin is deactivated
+function woorpd_deactivation_hook()
+{
+    do_action('woorpd_flush_cache');
+}
+// Register the deactivation hook
+register_deactivation_hook(__FILE__, 'woorpd_deactivation_hook');

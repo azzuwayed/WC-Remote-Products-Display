@@ -7,9 +7,9 @@ if (!defined('ABSPATH')) {
 
 function woorpd_get_products($count = null, $filtered_categories = null)
 {
-    $apiwoourl = get_option('woorpd_api_woo_url','');
-    $apiwoock  = get_option('woorpd_api_woo_ck','');
-    $apiwoocs  = get_option('woorpd_api_woo_cs','');
+    $apiwoourl = get_option('woorpd_api_woo_url');
+    $apiwoock  = get_option('woorpd_api_woo_ck');
+    $apiwoocs  = get_option('woorpd_api_woo_cs');
 
     $debug_enabled = get_option('woorpd_debug_enable_logging', '');
     if ($debug_enabled == 'yes') {
@@ -31,7 +31,7 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     }
 
     // Validate and set timeout 
-    $timeout = get_option('woorpd_debug_timeout', 20);
+    $timeout = get_option('woorpd_debug_timeout', 10);
     if ($timeout !== null && $timeout !== 0) {
         $api->setTimeout(intval($timeout));
     } else {
@@ -39,7 +39,7 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     }
 
     // Validate and set rate limit
-    $rateLimit = get_option('woorpd_debug_rate_limit', 10);
+    $rateLimit = get_option('woorpd_debug_rate_limit', 30);
     if ($rateLimit !== null && $rateLimit !== 0) {
         $api->setRateLimit(intval($rateLimit));
     } else {

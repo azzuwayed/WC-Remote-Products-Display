@@ -166,9 +166,12 @@ class WooRPDRemoteAPI
         $constructed_url = esc_url_raw($this->website_url . "/" . $endpoint . "?" . http_build_query($args));
         $cache_key = "woorpd_api_" . md5($constructed_url);
 
+        // for debug only
+        // $this->handleError($constructed_url);
+
         // Check if the response is cached
         if ($cached_response = get_transient($cache_key)) {
-            $this->logger?->log("Transient $cache_key RETRIEVED successfully.", 'INFO');
+            $this->logger?->log("Products loaded from cache successfully.", 'INFO');
             return $cached_response;
         }
 
@@ -204,7 +207,7 @@ class WooRPDRemoteAPI
 
         // Cache the response and update the rate limiter count, fluch old cache if it exists
         if ($this->isCachingEnabled()) {
-            $this->logger?->log("Transient $cache_key SET successfully.", 'INFO');
+            $this->logger?->log("Products are fetched and cached successfully.", 'INFO');
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
         set_transient(self::WOORPD_API_RATE_LIMIT, $current_requests + 1, $this->rate_limit);
@@ -240,7 +243,7 @@ class WooRPDRemoteAPI
             }
 
             // Log the INFO messages only if there is no error and if the logger is enabled
-            $logMessage = "[Shortcode] found pages: $page, products limit: $count_limit";
+            $logMessage = "[Shortcode] fetched pages: $page, products limit: $count_limit";
             if (!empty($filtered_categories)) {
                 $logMessage .= ", filtered category IDs: " . implode(',', $filtered_categories);
             }

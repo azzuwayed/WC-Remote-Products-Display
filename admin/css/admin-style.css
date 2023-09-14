@@ -67,7 +67,7 @@
 
 .woorpd-settings-wrap .tabcontent {
     display: none;
-    padding: 20px 20px 0 20px;
+    padding: 0 20px 0 20px;
     border-top: 1px solid #e2e4e7;
 }
 
@@ -79,6 +79,7 @@
 .woorpd-settings-wrap label {
     display: block;
     margin-bottom: 5px;
+    margin-top: 15px;
     font-weight: bold;
 }
 
@@ -261,12 +262,16 @@
     line-height: 0.7;
 }
 
-.woordp-mn-top {
+.woorpd-mn-top {
     margin-top: 20px;
 }
 
-.woordp-mn-btm {
+.woorpd-mn-btm {
     margin-bottom: 20px;
+}
+
+.woorpd-mn-top-5 {
+    margin-top: 5px;
 }
 
 .tabcontent hr {
@@ -275,4 +280,5 @@
 
 .red-color {
     color: red !important;
+    font-weight: 600;
 }

@@ -4,14 +4,11 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-// delete_option('xxxxx'); 
-
-// Function to run when the plugin is uninstalled
-function woordp_uninstall_hook() {
-    // Log an informational message to the WordPress error log
-    error_log("WooRPD plugin has been uninstalled successfully.");
-
+// Remove all traces of the plugin
+function woorpd_uninstall_hook()
+{
+    do_action('woorpd_reset_everything');
 }
 
 // Register the uninstall hook
-register_uninstall_hook(__FILE__, 'woordp_uninstall');
+register_uninstall_hook(__FILE__, 'woorpd_uninstall');

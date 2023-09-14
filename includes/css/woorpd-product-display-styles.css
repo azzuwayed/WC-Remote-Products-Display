@@ -45,7 +45,7 @@
     transform: scale(1.05);
 }
 
-/* Product title */
+/* Product title/name */
 .woorpd-product-title {
     font-weight: bold;
     padding: 10px 15px;
@@ -169,7 +169,7 @@
 
 /* Product price */
 .woorpd-product-price {
-    padding: 12px 15px;
+    padding: 15px 15px 5px 15px;
     font-size: 1.1em;
     font-weight: bold;
     color: #333;

@@ -16,25 +16,25 @@
     </nav>
 
     <section id="API Connection" class="tabcontent active-content">
-        <form id="api-connection-settings-form" method="post" action="">
+        <form id="api-connection-settings-form" class="woorpd-mn-top" method="post" action="">
             <input type="hidden" name="form_id" value="api-connection-settings-form">
             <div class="form-group">
                 <label for="woorpd_api_woo_url">Remote WooCommerce URL:</label>
-                <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url','')); ?>" required>
+                <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url', '')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_url"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_url"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_ck">Consumer Key:</label>
-                <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck','')); ?>" required>
+                <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck', '')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_ck"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_ck"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_cs">Consumer Secret:</label>
-                <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs','')); ?>" required>
+                <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs', '')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_cs"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_cs"></div> <!-- Server-side Error Message -->
             </div>
@@ -55,9 +55,7 @@
             <input type="hidden" name="form_id" value="display-settings-form">
             <fieldset>
                 <legend>Product Card Elements</legend>
-                <label>
-                    <p class="description">Select which product elements you would like to display on the card.</p>
-                </label>
+                <p class="description"><strong> Choose which product elements you would like to display on the card. </strong></p>
                 <?php
                 // Array of checkbox names and labels
                 $checkboxes = [
@@ -70,31 +68,35 @@
                 ];
                 // Loop to generate checkboxes
                 foreach ($checkboxes as $name => $label) {
-                    generate_checkbox($name, $label, get_option($name,''));
+                    generate_checkbox($name, $label, get_option($name, ''));
                 }
                 ?>
             </fieldset>
             <fieldset>
                 <legend>Global Display Settings</legend>
 
-                <label class="woordp-mn-top">
-                    Count limit
-                    <p class="description">How many products to display per shortcode. This limit must be equal or greater than any shortcode.</p>
-                    <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit','')); ?>">
+                <label class="woorpd-mn-top-5">
+                    Count limit (beta)
+                    <p class="description">
+                        How many products to display per shortcode.
+                        This limit must be equal or greater than any shortcode,
+                        and not greater than available products on the remote website, otherwise you will get an error.
+
+                    </p>
+                    <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit', '')); ?>">
                 </label>
                 <hr>
 
                 <!-- Filtered Categories Checkbox -->
-                <?php generate_checkbox('woorpd_display_filtered_categories', 'Filtered categories', get_option('woorpd_display_filtered_categories','')); ?>
-
-                <label>
-                    <p class="description red-color">When enabled, "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
+                <label class="woorpd-mn-top">
+                    <?php generate_checkbox('woorpd_display_filtered_categories', 'Filtered categories (beta)', get_option('woorpd_display_filtered_categories', '')); ?>
                 </label>
+                <p class="description red-color">Warning: when this option is enabled, the below "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
 
-                <label class="woordp-mn-top">
+                <label class="woorpd-mn-top">
                     Category IDs
-                    <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" must be enabled.</p>
-                    <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids','')); ?>">
+                    <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" must be enabled for this to work.</p>
+                    <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids', '')); ?>">
                 </label>
 
                 <!-- This section needs development to fetch the categories in the mulitple options box 
@@ -119,7 +121,7 @@
                  This section needs development to fetch the categories in the mulitple options box -->
 
                 <hr>
-                <legend class="woordp-mn-top">Instructions:</legend>
+                <legend class="woorpd-mn-top">Instructions:</legend>
                 <p class="description">&#x2022; You can override glabal settings with shortcode attributes.</p>
                 <p class="description">&#x2022; Attributes are optional, and will default to global settings if not set.</p>
 
@@ -152,38 +154,35 @@
                 <label>
                     <p class="description">Only enable on development environment. Wordpress debug must be enabled for this to work.
                         The debug includes errors and trivial data, and will make frontend errors more detailed.</p>
+                    <?php generate_checkbox('woorpd_debug_enable_logging', 'Enabled', get_option('woorpd_debug_enable_logging', '')); ?>
                 </label>
-                <?php generate_checkbox('woorpd_debug_enable_logging', 'Enabled', get_option('woorpd_debug_enable_logging','')); ?>
-
             </fieldset>
 
             <fieldset>
-                <legend>Advanced Settings</legend>
-                <label>
-                    <p class="description red-color">Adjusting these settings without understanding their impact can result in poor performance.</p>
-                </label>
+                <legend>Advanced Settings (beta)</legend>
+                <p class="description red-color strong">Warning: adjusting these settings without understanding their impact can result in poor performance.</p>
 
-                <label class="woordp-mn-top">
+                <label class="woorpd-mn-top">
                     Cache Duration
                     <p class="description">Frequent API calls may overload the server. Long cache might serve outdated data.
                         Cache is shared between users and saved in your database.
                         (default is 6 hours = 21600 seconds)
                     </p>
-                    <input type="text" name="woorpd_debug_cache_duration" value="<?php echo esc_attr(get_option('woorpd_debug_cache_duration','')); ?>">
+                    <input type="text" name="woorpd_debug_cache_duration" value="<?php echo esc_attr(get_option('woorpd_debug_cache_duration', '')); ?>">
                 </label>
-                <label class="woordp-mn-top">
+                <label class="woorpd-mn-top">
                     Timeout Duration
                     <p class="description">Short timeouts may result in errors, while long timeouts can slow down the user experience.
-                        (default is 20 seconds)
+                        (default is 10 seconds)
                     </p>
-                    <input type="text" name="woorpd_debug_timeout" value="<?php echo esc_attr(get_option('woorpd_debug_timeout','')); ?>">
+                    <input type="text" name="woorpd_debug_timeout" value="<?php echo esc_attr(get_option('woorpd_debug_timeout', '')); ?>">
                 </label>
-                <label class="woordp-mn-top">
+                <label class="woorpd-mn-top">
                     Rate Limit
                     <p class="description">Higher limits can exceed the API's allowance, leading to a ban.
-                        (default is 10 per minute)
+                        (default is 30 per minute)
                     </p>
-                    <input type="text" name="woorpd_debug_rate_limit" value="<?php echo esc_attr(get_option('woorpd_debug_rate_limit','')); ?>">
+                    <input type="text" name="woorpd_debug_rate_limit" value="<?php echo esc_attr(get_option('woorpd_debug_rate_limit', '')); ?>">
                 </label>
             </fieldset>
 

@@ -19,17 +19,6 @@ if (is_admin()) {
 woorpd_include_files('includes/api-connect.php');
 woorpd_include_files('includes/shortcode.php');
 
-/**
- * Adds a "Settings" link on the plugin page.
- * This link redirects to the WooCommerce Remote Products Display settings page.
- */
-add_filter('plugin_action_links_' . plugin_basename(WOORPD_PLUGIN_ROOT . 'woorpd.php'), 'woorpd_add_settings_link');
-function woorpd_add_settings_link($links)
-{
-    $settings_link = '<a href="' . esc_url(admin_url('options-general.php?page=woorpd')) . '" title="' . esc_attr__('Go to WooCommerce Remote Products Display settings', 'woorpd') . '">' . esc_html__('Settings', 'woorpd') . '</a>';
-    array_unshift($links, $settings_link);  // This places the "Settings" link at the beginning
-    return $links;
-}
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -37,7 +26,7 @@ function woorpd_add_settings_link($links)
 function woorpd_enqueue_admin_assets($hook)
 {
     // Check if we are on the plugin's settings page
-    if ($hook != 'toplevel_page_woorpd_settings') {
+    if ($hook != 'toplevel_page_woorpd') {
         return;
     }
 
@@ -69,3 +58,15 @@ function woorpd_enqueue_scripts()
     wp_localize_script('woorpd-product-display-scripts', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
 }
 add_action('wp_enqueue_scripts', 'woorpd_enqueue_scripts');
+
+/**
+ * Adds a "Settings" link on the plugin page.
+ * This link redirects to the WooCommerce Remote Products Display settings page.
+ */
+add_filter('plugin_action_links_' . plugin_basename(WOORPD_PLUGIN_ROOT . 'woorpd.php'), 'woorpd_add_settings_link');
+function woorpd_add_settings_link($links)
+{
+    $settings_link = '<a href="' . esc_url(admin_url('options-general.php?page=woorpd')) . '" title="' . esc_attr__('Go to WooCommerce Remote Products Display settings', 'woorpd') . '">' . esc_html__('Settings', 'woorpd') . '</a>';
+    array_unshift($links, $settings_link);  // This places the "Settings" link at the beginning
+    return $links;
+}

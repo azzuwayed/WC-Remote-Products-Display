@@ -45,7 +45,8 @@ $woorpd_debug_checkbox_options = [
 /**
  * Register settings with WordPress for API Connection.
  */
-function woorpd_register_api_settings() {
+function woorpd_register_api_settings()
+{
     global $woorpd_api_settings;
     woorpd_register_settings(WOORPD_OPTIONS_GROUP_API, $woorpd_api_settings);
 }
@@ -54,7 +55,8 @@ add_action('admin_init', 'woorpd_register_api_settings');
 /**
  * Register settings with WordPress for Display Settings.
  */
-function woorpd_register_display_settings() {
+function woorpd_register_display_settings()
+{
     global $woorpd_display_settings;
     woorpd_register_settings(WOORPD_OPTIONS_GROUP_DISPLAY, $woorpd_display_settings);
 }
@@ -63,7 +65,8 @@ add_action('admin_init', 'woorpd_register_display_settings');
 /**
  * Register settings with WordPress for Debug Settings.
  */
-function woorpd_register_debug_settings() {
+function woorpd_register_debug_settings()
+{
     global $woorpd_debug_settings;
     woorpd_register_settings(WOORPD_OPTIONS_GROUP_DEBUG, $woorpd_debug_settings);
 }
@@ -75,7 +78,8 @@ add_action('admin_init', 'woorpd_register_debug_settings');
  * @param string $group_name The name of the option group.
  * @param array $settings The settings to register.
  */
-function woorpd_register_settings($group_name, $settings) {
+function woorpd_register_settings($group_name, $settings)
+{
     if (is_array($settings)) {
         foreach ($settings as $setting_name => $sanitize_callback) {
             register_setting($group_name, $setting_name, $sanitize_callback);
@@ -93,12 +97,19 @@ function woorpd_register_settings($group_name, $settings) {
 /**
  * Handles the submission of the API Connection form.
  */
-function handle_api_form_submission() {
+function handle_api_form_submission()
+{
     global $woorpd_api_settings;
 
     // Validate nonce
     if (isset($_POST['woorpd_save_api_nonce']) && wp_verify_nonce($_POST['woorpd_save_api_nonce'], 'woorpd_save_api_nonce')) {
-        // Save or delete options
+
+        // Flush cache before saving
+        //woorpd_flush_cache();
+
+        woorpd_reset_plugin();
+
+        // Save options
         foreach ($woorpd_api_settings as $option_name => $sanitize_callback) {
             if (isset($_POST[$option_name])) {
                 $value = call_user_func($sanitize_callback, $_POST[$option_name]);
@@ -115,12 +126,14 @@ function handle_api_form_submission() {
 /**
  * Handles the submission of the Display Settings form.
  */
-function handle_display_form_submission() {
+function handle_display_form_submission()
+{
     global $woorpd_display_settings, $woorpd_display_checkbox_options;
 
     // Validate nonce
     if (isset($_POST['woorpd_save_display_nonce']) && wp_verify_nonce($_POST['woorpd_save_display_nonce'], 'woorpd_save_display_nonce')) {
-        // Save or delete options
+
+        // Save options
         foreach ($woorpd_display_settings as $option_name => $sanitize_callback) {
             if (isset($_POST[$option_name])) {
                 $value = call_user_func($sanitize_callback, $_POST[$option_name]);
@@ -146,34 +159,41 @@ function handle_display_form_submission() {
 /**
  * Resets all plugin options and flushes the cache.
  */
-function woorpd_reset_plugin() {
-do_action('woorpd_reset_everything');
-WooRPDSettings::woorpd_initialize_settings();
-add_action('admin_notices', static function (): void {
-    echo wp_kses_post(
-        sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-            __('All cache, transients, and options have been reset.', 'woorpd'))
-    );
-});
+function woorpd_reset_plugin()
+{
+    do_action('woorpd_reset_everything');
+    WooRPDSettings::woorpd_initialize_settings();
+    add_action('admin_notices', static function (): void {
+        echo wp_kses_post(
+            sprintf(
+                '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+                __('All options, cache, and transients have been reset. First load will be slower to save the new cache.', 'woorpd')
+            )
+        );
+    });
 }
 
 /**
  * Flushes the cache.
  */
-function woorpd_flush_cache() {
-do_action('woorpd_flush_cache');
-add_action('admin_notices', static function (): void {
-    echo wp_kses_post(
-        sprintf('<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-            __('All cache and transients have been flushed.', 'woorpd'))
-    );
-});
+function woorpd_flush_cache()
+{
+    do_action('woorpd_flush_cache');
+    add_action('admin_notices', static function (): void {
+        echo wp_kses_post(
+            sprintf(
+                '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+                __('All cache and transients have been flushed. First load will be slower to save the new cache.', 'woorpd')
+            )
+        );
+    });
 }
 
 /**
  * Handles the submission of the Debug Settings form.
  */
-function handle_debug_form_submission() {
+function handle_debug_form_submission()
+{
     global $woorpd_debug_settings, $woorpd_debug_checkbox_options;
 
     // Validate nonce
@@ -190,7 +210,7 @@ function handle_debug_form_submission() {
             woorpd_flush_cache();
             return;
         }
-        
+
         // Save or delete options
         foreach ($woorpd_debug_settings as $option_name => $sanitize_callback) {
             if (isset($_POST[$option_name])) {
@@ -217,7 +237,8 @@ function handle_debug_form_submission() {
 /**
  * Main function to handle form submissions.
  */
-function handle_form_submissions() {
+function handle_form_submissions()
+{
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form_id'])) {
             switch ($_POST['form_id']) {
@@ -249,7 +270,8 @@ add_action('admin_init', 'handle_form_submissions');
  * @param string $label The label text for the checkbox.
  * @param mixed  $value The current value of the checkbox.
  */
-function generate_checkbox($name, $label, $value) {
+function generate_checkbox($name, $label, $value)
+{
     $checked = ($value === 'yes') ? 'checked' : '';
     echo '<label for="' . esc_attr($name) . '">';
     echo '<input type="checkbox" id="' . esc_attr($name) . '" name="' . esc_attr($name) . '" value="1" ' . $checked . ' />';
@@ -260,7 +282,8 @@ function generate_checkbox($name, $label, $value) {
 /**
  * Callback function for the admin settings page.
  */
-function woorpd_admin_page_callback() {
+function woorpd_admin_page_callback()
+{
     // Nonce for each form
     $api_nonce = wp_create_nonce('woorpd_save_api_nonce');
     $display_nonce = wp_create_nonce('woorpd_save_display_nonce');
@@ -268,19 +291,19 @@ function woorpd_admin_page_callback() {
 
     // Admin settings form template.
     include plugin_dir_path(__FILE__) . 'admin-template.php';
-
 }
 
 /**
  * Add admin menu page.
  */
 if (!function_exists('woorpd_add_admin_menu')) {
-    function woorpd_add_admin_menu() {
+    function woorpd_add_admin_menu()
+    {
         add_menu_page(
             'WooRPD Settings', // Page title
             'WooRPD', // Menu title
             'manage_options', // Capability
-            'woorpd_settings', // Menu slug
+            'woorpd', // Menu slug
             'woorpd_admin_page_callback', // Callback function
             'dashicons-cover-image', // Icon URL
             100 // Position
