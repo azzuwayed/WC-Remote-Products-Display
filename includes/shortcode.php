@@ -7,15 +7,17 @@ if (!defined('ABSPATH')) {
 
 function woorpd_get_products($count = null, $filtered_categories = null)
 {
-    $apiwoourl = get_option('woorpd_api_woo_url');
-    $apiwoock  = get_option('woorpd_api_woo_ck');
-    $apiwoocs  = get_option('woorpd_api_woo_cs');
+    $apiwoourl = get_option('woorpd_api_woo_url','');
+    $apiwoock  = get_option('woorpd_api_woo_ck','');
+    $apiwoocs  = get_option('woorpd_api_woo_cs','');
 
-    // Create a logger instance
-    $logger = new WooRPDLogger();
-
-    // Create an API instance with the logger
-    $api = new WooRPDRemoteAPI($logger);
+    $debug_enabled = get_option('woorpd_debug_enable_logging', '');
+    if ($debug_enabled == 'yes') {
+        $logger = new WooRPDLogger();
+        $api = new WooRPDRemoteAPI($logger);
+    } else {
+        $api = new WooRPDRemoteAPI();
+    }
 
     // Connect to the WooCommerce API
     $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
@@ -44,18 +46,6 @@ function woorpd_get_products($count = null, $filtered_categories = null)
         $api->setRateLimit(10);
     }
 
-
-    //----------------------------------------------------------------
-    // During Development ONLY
-    $woorpd_dev  = 0;
-    $host = $_SERVER['HTTP_HOST'];
-    if (substr($host, -6) === '.local' && $woorpd_dev == 1) {
-        $logger->log("DEVELOPMENT MODE IS ENABLED!", 'INFO');
-        $api->setCacheDuration(0);
-        $api->flushCache();
-    }
-    //----------------------------------------------------------------
-
     $products = [];
 
     // Fetch enable filter flag
@@ -63,7 +53,6 @@ function woorpd_get_products($count = null, $filtered_categories = null)
 
     // Determine the count limit
     $count = $count ?? get_option('woorpd_display_count_limit', 5);
-    $logger->log('The count limit is' . $count, 'INFO');
 
     // Fetch products based on the conditions
     if (!empty($enable_category_filter) && !empty($filtered_categories)) {
@@ -83,12 +72,12 @@ function woorpd_display_products($atts = [])
 {
 
     // Retrieve global visibility settings
-    $display_image = get_option('woorpd_display_image', '');
-    $display_name = get_option('woorpd_display_name', '');
-    $display_category = get_option('woorpd_display_category', '');
-    $display_price = get_option('woorpd_display_price', '');
-    $display_description = get_option('woorpd_display_description', '');
-    $display_url = get_option('woorpd_display_button', '');
+    $display_image = get_option('woorpd_display_image');
+    $display_name = get_option('woorpd_display_name');
+    $display_category = get_option('woorpd_display_category');
+    $display_price = get_option('woorpd_display_price');
+    $display_description = get_option('woorpd_display_description');
+    $display_url = get_option('woorpd_display_button');
 
     // Retrieve user-defined currency symbol option (add this part)
     // $user_currency_symbol = get_option('woorpd_currency_symbol', '$'); // Replace with the actual option name
@@ -106,8 +95,6 @@ function woorpd_display_products($atts = [])
     if (isset($response['error'])) {
         return '<div class="woorpd-error">' . esc_html($response['error']) . '</div>';
     }
-
-    error_log('Filtered Categories from Shortcode: ' . print_r($attributes['filtered_categories'], true));
 
     $products = $response['data'];
 

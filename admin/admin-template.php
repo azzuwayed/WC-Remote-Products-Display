@@ -17,35 +17,33 @@
 
     <section id="API Connection" class="tabcontent active-content">
         <form id="api-connection-settings-form" method="post" action="">
+            <input type="hidden" name="form_id" value="api-connection-settings-form">
             <div class="form-group">
                 <label for="woorpd_api_woo_url">Remote WooCommerce URL:</label>
-                <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url')); ?>" required>
+                <input type="text" id="woorpd_api_woo_url" name="woorpd_api_woo_url" value="<?php echo esc_attr(get_option('woorpd_api_woo_url','')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_url"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_url"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_ck">Consumer Key:</label>
-                <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck')); ?>" required>
+                <input type="text" id="woorpd_api_woo_ck" name="woorpd_api_woo_ck" value="<?php echo esc_attr(get_option('woorpd_api_woo_ck','')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_ck"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_ck"></div> <!-- Server-side Error Message -->
             </div>
 
             <div class="form-group">
                 <label for="woorpd_api_woo_cs">Consumer Secret:</label>
-                <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs')); ?>" required>
+                <input type="text" id="woorpd_api_woo_cs" name="woorpd_api_woo_cs" value="<?php echo esc_attr(get_option('woorpd_api_woo_cs','')); ?>" required>
                 <div class="error-feedback" data-for="woorpd_api_woo_cs"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_cs"></div> <!-- Server-side Error Message -->
             </div>
             <!-- Hidden field for nonce -->
-            <input type="hidden" name="woorpd_save_options_nonce" value="<?php echo $nonce; ?>">
+            <input type="hidden" name="woorpd_save_api_nonce" value="<?php echo $api_nonce; ?>">
 
             <div class="woorpd-save-container">
-                <!-- Save Button -->
-                <input type="submit" name="submit" value="Save Changes" class="button button-primary" />
+                <input type="submit" name="save" value="Save Changes" class="button button-primary" />
                 <div class="woorpd-right-buttons">
-                    <!-- Reset Button -->
-                    <input type="submit" name="reset" value="Reset" class="button button-secondary" />
                 </div>
             </div>
             <div><span class="global-error-message"></span></div>
@@ -54,6 +52,7 @@
 
     <section id="Display" class="tabcontent">
         <form id="display-settings-form" method="post" action="">
+            <input type="hidden" name="form_id" value="display-settings-form">
             <fieldset>
                 <legend>Product Card Elements</legend>
                 <label>
@@ -71,7 +70,7 @@
                 ];
                 // Loop to generate checkboxes
                 foreach ($checkboxes as $name => $label) {
-                    generate_checkbox($name, $label, get_option($name));
+                    generate_checkbox($name, $label, get_option($name,''));
                 }
                 ?>
             </fieldset>
@@ -81,12 +80,12 @@
                 <label class="woordp-mn-top">
                     Count limit
                     <p class="description">How many products to display per shortcode. This limit must be equal or greater than any shortcode.</p>
-                    <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit')); ?>">
+                    <input type="text" name="woorpd_display_count_limit" value="<?php echo esc_attr(get_option('woorpd_display_count_limit','')); ?>">
                 </label>
                 <hr>
 
                 <!-- Filtered Categories Checkbox -->
-                <?php generate_checkbox('woorpd_display_filtered_categories', 'Filtered categories', get_option('woorpd_display_filtered_categories')); ?>
+                <?php generate_checkbox('woorpd_display_filtered_categories', 'Filtered categories', get_option('woorpd_display_filtered_categories','')); ?>
 
                 <label>
                     <p class="description red-color">When enabled, "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
@@ -95,7 +94,7 @@
                 <label class="woordp-mn-top">
                     Category IDs
                     <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" must be enabled.</p>
-                    <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids')); ?>">
+                    <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids','')); ?>">
                 </label>
 
                 <!-- This section needs development to fetch the categories in the mulitple options box 
@@ -130,14 +129,12 @@
             </fieldset>
 
             <!-- Hidden field for nonce -->
-            <input type="hidden" name="woorpd_save_options_nonce" value="<?php echo $nonce; ?>">
+            <input type="hidden" name="woorpd_save_display_nonce" value="<?php echo $display_nonce; ?>">
 
             <div class="woorpd-save-container">
                 <!-- Save Button -->
-                <input type="submit" name="submit" value="Save Changes" class="button button-primary" />
+                <input type="submit" name="save" value="Save Changes" class="button button-primary" />
                 <div class="woorpd-right-buttons">
-                    <!-- Reset Button -->
-                    <input type="submit" name="reset" value="Reset" class="button button-secondary" />
                 </div>
             </div>
             <div><span class="global-error-message"></span></div>
@@ -147,6 +144,7 @@
     <section id="Debug" class="tabcontent">
         <!-- Form for Advanced Settings -->
         <form id="debug-settings-form" method="post" action="">
+            <input type="hidden" name="form_id" value="debug-settings-form">
 
 
             <fieldset>
@@ -155,7 +153,7 @@
                     <p class="description">Only enable on development environment. Wordpress debug must be enabled for this to work.
                         The debug includes errors and trivial data, and will make frontend errors more detailed.</p>
                 </label>
-                <?php generate_checkbox('woorpd_debug_enable_logging', 'Enabled', get_option('woorpd_debug_enable_logging')); ?>
+                <?php generate_checkbox('woorpd_debug_enable_logging', 'Enabled', get_option('woorpd_debug_enable_logging','')); ?>
 
             </fieldset>
 
@@ -171,38 +169,35 @@
                         Cache is shared between users and saved in your database.
                         (default is 6 hours = 21600 seconds)
                     </p>
-                    <input type="text" name="woorpd_debug_cache_duration" value="<?php echo esc_attr(get_option('woorpd_debug_cache_duration')); ?>">
+                    <input type="text" name="woorpd_debug_cache_duration" value="<?php echo esc_attr(get_option('woorpd_debug_cache_duration','')); ?>">
                 </label>
                 <label class="woordp-mn-top">
                     Timeout Duration
                     <p class="description">Short timeouts may result in errors, while long timeouts can slow down the user experience.
                         (default is 20 seconds)
                     </p>
-                    <input type="text" name="woorpd_debug_timeout" value="<?php echo esc_attr(get_option('woorpd_debug_timeout')); ?>">
+                    <input type="text" name="woorpd_debug_timeout" value="<?php echo esc_attr(get_option('woorpd_debug_timeout','')); ?>">
                 </label>
                 <label class="woordp-mn-top">
                     Rate Limit
                     <p class="description">Higher limits can exceed the API's allowance, leading to a ban.
                         (default is 10 per minute)
                     </p>
-                    <input type="text" name="woorpd_debug_rate_limit" value="<?php echo esc_attr(get_option('woorpd_debug_rate_limit')); ?>">
+                    <input type="text" name="woorpd_debug_rate_limit" value="<?php echo esc_attr(get_option('woorpd_debug_rate_limit','')); ?>">
                 </label>
             </fieldset>
 
-
             <!-- Hidden field for nonce -->
-            <input type="hidden" name="woorpd_save_options_nonce" value="<?php echo $nonce; ?>">
+            <input type="hidden" name="woorpd_save_debug_nonce" value="<?php echo $debug_nonce; ?>">
 
             <div class="woorpd-save-container">
-                <!-- Save Button -->
-                <input type="submit" name="submit" value="Save Changes" class="button button-primary" />
+                <input type="submit" name="save" value="Save Changes" class="button button-primary" />
                 <div class="woorpd-right-buttons">
-                    <!-- Reset Button -->
-                    <input type="submit" name="reset" value="Reset" class="button button-secondary" />
+                    <input type="submit" name="reset" value="Reset Plugin" class="button button-link-delete" />
+                    <input type="submit" name="flush" value="Flush Cache" class="button button-secondary" />
                 </div>
             </div>
             <div><span class="global-error-message"></span></div>
         </form>
     </section>
-
 </div>

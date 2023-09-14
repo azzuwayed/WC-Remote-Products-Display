@@ -20,7 +20,7 @@ class WooRPDLogger
      * @param array $data Additional data to log.
      * @return array|null The error response if type is 'ERROR', null otherwise.
      */
-    public function log(string $message, string $type = 'INFO', array $data = []): ?array
+    public static function log(string $message, string $type = 'INFO', array $data = []): ?array
     {
         if (WP_DEBUG && WP_DEBUG_LOG) {
             $message = ($type === 'INFO' && !empty($data)) ? "$message " . json_encode($data) : $message;
@@ -38,16 +38,16 @@ class WooRPDLogger
 class WooRPDRemoteAPI
 {
     private const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
-    private const WOORPD_RATE_LIMIT_KEY = "WOORPD_RATE_LIMIT_KEY";
+    private const WOORPD_API_RATE_LIMIT = "woorpd_api_rate_limit";
 
     private $website_url;
     private $consumer_key;
     private $consumer_secret;
     private $logger;
 
-    private $cache_duration = 3600; // 1 hour (3600)
-    private $rate_limit = 5; // 5 requests per minute
-    private $timeout = 15; // 15 seconds
+    private $cache_duration = 21600; // 6 hours (21600)
+    private $timeout = 20; // 20 seconds
+    private $rate_limit = 10; // 10 requests per minute
 
     /**
      * WooRPDRemoteAPI constructor.
@@ -58,9 +58,6 @@ class WooRPDRemoteAPI
     {
         $this->logger = $logger;
         $this->initializeRateLimit();
-        if ($this->logger) {
-            $this->logger->log("WooRPD initialized.", 'INFO');
-        }
     }
 
     /**
@@ -103,8 +100,8 @@ class WooRPDRemoteAPI
      */
     private function initializeRateLimit(): void
     {
-        if (!get_transient(self::WOORPD_RATE_LIMIT_KEY)) {
-            set_transient(self::WOORPD_RATE_LIMIT_KEY, 0, $this->cache_duration);
+        if (!get_transient(self::WOORPD_API_RATE_LIMIT)) {
+            set_transient(self::WOORPD_API_RATE_LIMIT, 0, $this->cache_duration);
         }
     }
 
@@ -167,13 +164,7 @@ class WooRPDRemoteAPI
     private function makeRequest(string $endpoint, array $args = []): array
     {
         $constructed_url = esc_url_raw($this->website_url . "/" . $endpoint . "?" . http_build_query($args));
-        $cache_key = "woorpd_" . md5($constructed_url);
-
-        //------------------------
-        // For debug only
-        // var_dump($constructed_url);
-        //------------------------
-
+        $cache_key = "woorpd_api_" . md5($constructed_url);
 
         // Check if the response is cached
         if ($cached_response = get_transient($cache_key)) {
@@ -185,7 +176,7 @@ class WooRPDRemoteAPI
         $this->logger?->log("Connecting to $this->website_url", 'INFO');
 
         // Rate limiting
-        $current_requests = get_transient(self::WOORPD_RATE_LIMIT_KEY) ?: 0;
+        $current_requests = get_transient(self::WOORPD_API_RATE_LIMIT) ?: 0;
         if ($current_requests >= $this->rate_limit) {
             return $this->handleError("Rate limit exceeded. Please wait a moment and try again.", 'ERROR');
         }
@@ -213,26 +204,16 @@ class WooRPDRemoteAPI
 
         // Cache the response and update the rate limiter count, fluch old cache if it exists
         if ($this->isCachingEnabled()) {
-            //$this->flushCache(); // For debug only
             $this->logger?->log("Transient $cache_key SET successfully.", 'INFO');
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
-        set_transient(self::WOORPD_RATE_LIMIT_KEY, $current_requests + 1, $this->rate_limit);
+        set_transient(self::WOORPD_API_RATE_LIMIT, $current_requests + 1, $this->rate_limit);
 
         return $decoded_response;
     }
 
-
     public function fetchProducts(int $count_limit = 3, array $filtered_categories = []): array
     {
-        //------------------------
-        // For debug only
-        //var_dump($filtered_categories);
-        //var_dump(array_map('intval', $filtered_categories));
-        //var_dump(implode(',', array_map('intval', $filtered_categories)));
-        //------------------------
-
-
         $args = [
             'per_page' => 100, // Max allowed by WooCommerce by default (100)
             'orderby' => 'date',

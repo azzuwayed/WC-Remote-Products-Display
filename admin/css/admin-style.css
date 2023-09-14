@@ -261,14 +261,6 @@
     line-height: 0.7;
 }
 
-.red-color {
-    color: #e74c3c !important;
-}
-
-.green-color {
-    color: green !important;
-}
-
 .woordp-mn-top {
     margin-top: 20px;
 }
@@ -279,4 +271,8 @@
 
 .tabcontent hr {
     margin-top: 20px;
+}
+
+.red-color {
+    color: red !important;
 }

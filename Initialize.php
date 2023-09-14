@@ -19,7 +19,6 @@ if (is_admin()) {
 woorpd_include_files('includes/api-connect.php');
 woorpd_include_files('includes/shortcode.php');
 
-
 /**
  * Adds a "Settings" link on the plugin page.
  * This link redirects to the WooCommerce Remote Products Display settings page.
