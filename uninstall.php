@@ -11,4 +11,4 @@ function woorpd_uninstall_hook()
 }
 
 // Register the uninstall hook
-register_uninstall_hook(__FILE__, 'woorpd_uninstall');
+register_uninstall_hook(__FILE__, 'woorpd_uninstall_hook');

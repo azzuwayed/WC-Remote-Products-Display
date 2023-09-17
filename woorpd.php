@@ -30,7 +30,7 @@ define('WOORPD_TEXTDOMAIN', 'woorpd');
 define('WOORPD_NAME', 'woorpd');
 define('WOORPD_PLUGIN_ROOT', plugin_dir_path(__FILE__));
 define('WOORPD_PLUGIN_ABSOLUTE', __FILE__);
-define('WOORPD_MIN_PHP_VERSION', '8.0');
+define('WOORPD_MIN_PHP_VERSION', '7.4');
 define('WOORPD_WP_VERSION', '6.0');
 
 add_action(
@@ -53,7 +53,7 @@ if (version_compare(PHP_VERSION, WOORPD_MIN_PHP_VERSION, '<=')) {
             echo wp_kses_post(
                 sprintf(
                     '<div class="notice notice-error"><p>%s</p></div>',
-                    __('WooCommerce Remote Products Display plugin requires PHP 8.0 or newer.', WOORPD_TEXTDOMAIN)
+                    __('WooCommerce Remote Products Display plugin requires PHP 7.4 or newer.', WOORPD_TEXTDOMAIN)
                 )
             );
         }
@@ -96,7 +96,7 @@ class WooRPDSettings
 }
 register_activation_hook(__FILE__, [WooRPDSettings::class, 'woorpd_initialize_settings']);
 
-// Include required files
+// Function to include required files
 function woorpd_include_files($filename)
 {
     $file_path = WOORPD_PLUGIN_ROOT . $filename;

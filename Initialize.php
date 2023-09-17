@@ -10,18 +10,18 @@ if (!defined('ABSPATH')) {
 woorpd_include_files('init-local-only.php');
 //----------------------------------------------------------------
 
+// General includes
+//woorpd_include_files('includes/enqueue.php');
+
 // Admin Settings
 if (is_admin()) {
     woorpd_include_files('admin/admin-settings.php');
 }
 
-// Include Functionality
+// Main functions
 woorpd_include_files('includes/api-connect.php');
 woorpd_include_files('includes/shortcode.php');
 
-
-//----------------------------------------------------------------
-//----------------------------------------------------------------
 // Enqueue admin assets
 function woorpd_enqueue_admin_assets($hook)
 {
@@ -31,11 +31,11 @@ function woorpd_enqueue_admin_assets($hook)
     }
 
     // Register and enqueue admin styles
-    wp_register_style('woorpd-admin-style', plugins_url('admin/css/admin-style.css', __FILE__), [], '1.0.2');
+    wp_register_style('woorpd-admin-style', plugins_url('admin/css/admin-style.css', __FILE__), [], '1.0.0');
     wp_enqueue_style('woorpd-admin-style');
 
     // Register and enqueue admin scripts
-    wp_register_script('woorpd-admin-script', plugins_url('admin/js/admin-script.js', __FILE__), ['jquery'], '1.0.2', true);
+    wp_register_script('woorpd-admin-script', plugins_url('admin/js/admin-script.js', __FILE__), ['jquery'], '1.0.0', true);
     wp_enqueue_script('woorpd-admin-script');
 
     // Localize script for AJAX
@@ -47,11 +47,11 @@ add_action('admin_enqueue_scripts', 'woorpd_enqueue_admin_assets');
 function woorpd_enqueue_scripts()
 {
     // Register and enqueue frontend styles
-    wp_register_style('woorpd-product-display-styles', plugin_dir_url(__FILE__) . 'includes/css/woorpd-product-display-styles.css', [], '1.0.2');
+    wp_register_style('woorpd-product-display-styles', plugin_dir_url(__FILE__) . 'includes/css/woorpd-product-display-styles.css', [], '1.0.0');
     wp_enqueue_style('woorpd-product-display-styles');
 
     // Register and enqueue frontend scripts
-    wp_register_script('woorpd-product-display-scripts', plugin_dir_url(__FILE__) . 'includes/js/woorpd-product-display-scripts.js', ['jquery'], '1.0.2', true);
+    wp_register_script('woorpd-product-display-scripts', plugin_dir_url(__FILE__) . 'includes/js/woorpd-product-display-scripts.js', ['jquery'], '1.0.0', true);
     wp_enqueue_script('woorpd-product-display-scripts');
 
     // Localize script for AJAX

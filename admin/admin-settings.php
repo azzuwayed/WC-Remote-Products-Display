@@ -167,7 +167,7 @@ function woorpd_reset_plugin()
         echo wp_kses_post(
             sprintf(
                 '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                __('All options, cache, and transients have been reset. First load will be slower to save the new cache.', 'woorpd')
+                __('All options, cache, and transients have been reset. Initial load will be slower to cache the request.', 'woorpd')
             )
         );
     });
@@ -183,7 +183,7 @@ function woorpd_flush_cache()
         echo wp_kses_post(
             sprintf(
                 '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                __('All cache and transients have been flushed. First load will be slower to save the new cache.', 'woorpd')
+                __('All cache and transients have been flushed. Initial load will be slower to cache the request.', 'woorpd')
             )
         );
     });
