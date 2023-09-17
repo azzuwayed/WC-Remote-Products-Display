@@ -41,10 +41,10 @@ class WooRPDUtilities
      */
     private static function deleteAPIRequestCache(): void
     {
-    global $wpdb;
-    $like_pattern = $wpdb->esc_like('_transient_woorpd_api_') . '%';
-    $sql = "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s";
-    $wpdb->query($wpdb->prepare($sql, $like_pattern));
+        global $wpdb;
+        $like_pattern = $wpdb->esc_like('_transient_woorpd_api_') . '%';
+        $sql = "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s";
+        $wpdb->query($wpdb->prepare($sql, $like_pattern));
     }
 
     /**
@@ -52,6 +52,7 @@ class WooRPDUtilities
      */
     private static function deleteAllOptions(): void
     {
+        // Combine all option keys into a single array
         $all_options = array_merge(
             array_keys($GLOBALS['woorpd_api_settings']),
             array_keys($GLOBALS['woorpd_display_settings']),
@@ -60,7 +61,14 @@ class WooRPDUtilities
             $GLOBALS['woorpd_debug_checkbox_options']
         );
 
-        array_walk($all_options, 'delete_option');
+        // Add additional options to the list
+        $all_options[] = 'woorpd_api_connection_status';
+        $all_options[] = 'woorpd_all_categories';
+
+        // Loop through each option and delete it
+        foreach ($all_options as $option) {
+            delete_option($option);
+        }
     }
 
     /**
@@ -77,5 +85,4 @@ class WooRPDUtilities
             delete_transient($transient_name);
         });
     }
-
 }

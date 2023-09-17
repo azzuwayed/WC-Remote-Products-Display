@@ -38,6 +38,20 @@
                 <div class="error-feedback" data-for="woorpd_api_woo_cs"></div>
                 <div class="server-error-feedback" data-for="woorpd_api_woo_cs"></div> <!-- Server-side Error Message -->
             </div>
+
+            <div class="form-group">
+                <?php
+                $isConnected = get_option('woorpd_api_connection_status', false);
+                if ($isConnected) {
+                    echo '<span class="green-color">API Connection is successful.</span>';
+                } else {
+                    echo '<span class="red-color">API Connection failed.</span>';
+                }
+                ?>
+            </div>
+
+
+
             <!-- Hidden field for nonce -->
             <input type="hidden" name="woorpd_save_api_nonce" value="<?php echo $api_nonce; ?>">
 
@@ -91,11 +105,17 @@
                 <label class="woorpd-mn-top">
                     <?php generate_checkbox('woorpd_display_filtered_categories', 'Filtered categories (beta)', get_option('woorpd_display_filtered_categories', '')); ?>
                 </label>
-                <p class="description red-color">Warning: when this option is enabled, the below "Category IDs" becomes mandatory in global or shortcodes, otherwise you will get an error.</p>
+                <p class="description red-color">Warning: when this option is enabled, Category IDs become mandatory either in global or in shortcodes, otherwise you will get an error.</p>
+
+                <label class="woorpd-mn-top">
+                    Fetched Categories
+                </label>
+                <p class="description"><strong>Here you should see the fetched categories from your remote webiste:</strong></p>
+                <?php echo print_saved_categories(); ?>
 
                 <label class="woorpd-mn-top">
                     Category IDs
-                    <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" must be enabled for this to work.</p>
+                    <p class="description">Use comma-separated IDs of the categories you want to include exclusivly. "Filtered categories" option must be enabled for this to work.</p>
                     <input type="text" name="woorpd_display_filtered_categories_ids" value="<?php echo esc_attr(get_option('woorpd_display_filtered_categories_ids', '')); ?>">
                 </label>
 
@@ -108,13 +128,6 @@
                         <option value="multi_option2">Multi Option 2</option>
                         <option value="multi_option3">Multi Option 3</option>
                         <option value="multi_option4">Multi Option 4</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
-                        <option value="multi_option5">Multi Option 5</option>
                         <option value="multi_option5">Multi Option 5</option>
                     </select>
                 </label>

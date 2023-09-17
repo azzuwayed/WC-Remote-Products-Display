@@ -38,6 +38,8 @@ class WooRPDLogger
 class WooRPDRemoteAPI
 {
     private const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
+    private const API_ENDPOINT_CATEGORIES = "wp-json/wc/v3/products/categories";
+
     private const WOORPD_API_RATE_LIMIT = "woorpd_api_rate_limit";
 
     private $website_url;
@@ -215,6 +217,50 @@ class WooRPDRemoteAPI
         return $decoded_response;
     }
 
+    private function getMaxPagesFromAPI($response_headers): int
+    {
+        if (isset($response_headers['X-WP-TotalPages'])) {
+            return (int) $response_headers['X-WP-TotalPages'];
+        }
+        return 1; // Default to 1 if the header is not set
+    }
+
+    public function fetchCategories(): array
+    {
+        $args = [
+            'per_page' => 100, // Max allowed by WooCommerce by default (100)
+            'consumer_key' => $this->consumer_key,
+            'consumer_secret' => $this->consumer_secret
+        ];
+
+        $all_categories = [];
+        $page = 1;
+        $max_pages = $this->getMaxPagesFromAPI($this->makeRequest(self::API_ENDPOINT_CATEGORIES, $args));
+
+        do {
+            $args['page'] = $page;
+            $categories = $this->makeRequest(self::API_ENDPOINT_CATEGORIES, $args);
+
+            // Type Safety: Ensure $categories is an array
+            if (!is_array($categories)) {
+                $this->logger?->log("Unexpected response format. Expected an array.", 'ERROR');
+                return ['data' => []];
+            }
+
+            // Check for errors
+            if (isset($categories['error'])) {
+                $this->logger?->log("Error fetching categories: " . $categories['error'], 'ERROR');
+                return ['data' => []];
+            }
+
+            $all_categories = array_merge($all_categories, $categories);
+            $page++;
+        } while (count($categories) > 0 && $page <= $max_pages);
+
+        return ['data' => $all_categories];
+    }
+
+
     public function fetchProducts(int $count_limit = 3, array $filtered_categories = []): array
     {
         $args = [
@@ -232,7 +278,7 @@ class WooRPDRemoteAPI
 
         $all_products = [];
         $page = 1;
-        $max_pages = 10; // Maximum limit to prevent infinite loops
+        $max_pages = $this->getMaxPagesFromAPI($this->makeRequest(self::API_ENDPOINT_PRODUCTS, $args));
 
         do {
             $args['page'] = $page;

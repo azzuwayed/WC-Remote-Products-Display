@@ -104,22 +104,46 @@ function handle_api_form_submission()
     // Validate nonce
     if (isset($_POST['woorpd_save_api_nonce']) && wp_verify_nonce($_POST['woorpd_save_api_nonce'], 'woorpd_save_api_nonce')) {
 
-        // Flush cache before saving
-        //woorpd_flush_cache();
+        $logger = new WooRPDLogger();
+        $api    = new WooRPDRemoteAPI($logger);
 
-        woorpd_reset_plugin();
+        // Sanitize and Connect to the WooCommerce API
+        $apiwoourl = sanitize_text_field($_POST['woorpd_api_woo_url'] ?? '');
+        $apiwoock  = sanitize_text_field($_POST['woorpd_api_woo_ck'] ?? '');
+        $apiwoocs  = sanitize_text_field($_POST['woorpd_api_woo_cs'] ?? '');
+        $api->wooRPD_apiConnect($apiwoourl, $apiwoock, $apiwoocs);
 
-        // Save options
-        foreach ($woorpd_api_settings as $option_name => $sanitize_callback) {
-            if (isset($_POST[$option_name])) {
-                $value = call_user_func($sanitize_callback, $_POST[$option_name]);
+        // Fetch categories
+        $categories = $api->fetchCategories();
+
+        // Check for errors and update options accordingly
+        if (isset($categories['error'])) {
+            //add_settings_error('woorpd', 'woorpd_api_error', esc_html($categories['error']), 'error');
+            update_option('woorpd_api_connection_status', false);
+        } else {
+            update_option('woorpd_api_connection_status', true);
+
+            // Save API settings
+            foreach ($woorpd_api_settings as $option_name => $sanitize_callback) {
+                $value = sanitize_text_field($_POST[$option_name] ?? '');
                 update_option($option_name, $value);
             }
+
+            $all_categories = $categories['data'];
+            $category_pairs = [];
+            // Loop through each category to create pairs
+            foreach ($all_categories as $category) {
+                $pair = $category['name'] . ': ' . $category['id'];
+                $category_pairs[] = $pair;
+            }
+            // Save the category pairs to WordPress options
+            update_option('woorpd_all_categories', $category_pairs);
         }
     } else {
         add_settings_error('woorpd', 'woorpd_nonce_verification', 'Nonce verification failed.', 'error');
     }
 }
+
 
 //----------------------------------------------------------------
 
@@ -167,7 +191,7 @@ function woorpd_reset_plugin()
         echo wp_kses_post(
             sprintf(
                 '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                __('All options, cache, and transients have been reset. Initial load will be slower to cache the request.', 'woorpd')
+                __('All options and cache have been reset. First page load will be slower in order to cache the initial request.', 'woorpd')
             )
         );
     });
@@ -310,4 +334,26 @@ if (!function_exists('woorpd_add_admin_menu')) {
         );
     }
     add_action('admin_menu', 'woorpd_add_admin_menu');
+}
+
+//----------------------------------------------------------------
+
+/**
+ * Function to print saved categories.
+ */
+function print_saved_categories()
+{
+    // Retrieve the saved category pairs from WordPress options
+    $saved_category_pairs = get_option('woorpd_all_categories', []);
+
+    // Check if there are saved categories
+    if (empty($saved_category_pairs)) {
+        return "No categories found. Verify API connection.";
+    }
+
+    // Convert the category pairs array to a string
+    $category_pairs_str = implode(', ', $saved_category_pairs);
+
+    // Return the formatted string
+    return '<span class="green-color">Category Name: Category ID => ' . esc_html($category_pairs_str) . '</span>';
 }

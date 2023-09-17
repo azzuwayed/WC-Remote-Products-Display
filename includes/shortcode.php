@@ -35,7 +35,7 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     if ($timeout !== null && $timeout !== 0) {
         $api->setTimeout(intval($timeout));
     } else {
-        $api->setTimeout(20);
+        $api->setTimeout(10);
     }
 
     // Validate and set rate limit
@@ -52,7 +52,7 @@ function woorpd_get_products($count = null, $filtered_categories = null)
     $enable_category_filter = get_option('woorpd_display_filtered_categories', '');
 
     // Determine the count limit
-    $count = $count ?? get_option('woorpd_display_count_limit', 5);
+    $count = $count ?? get_option('woorpd_display_count_limit', 3);
 
     // Fetch products based on the conditions
     if (!empty($enable_category_filter) && !empty($filtered_categories)) {
