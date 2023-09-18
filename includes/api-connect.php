@@ -6,11 +6,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Class WooRPDLogger
+ * Class WCRPDLogger
  *
- * Logs messages for the WooRPD plugin.
+ * Logs messages for the WCRPD plugin.
  */
-class WooRPDLogger
+class WCRPDLogger
 {
     /**
      * Centralized logging and error handling method.
@@ -24,23 +24,23 @@ class WooRPDLogger
     {
         if (WP_DEBUG && WP_DEBUG_LOG) {
             $message = ($type === 'INFO' && !empty($data)) ? "$message " . json_encode($data) : $message;
-            error_log("WooRPD [$type]: $message");
+            error_log("WCRPD [$type]: $message");
         }
         return $type === 'ERROR' ? ['error' => $message] : null;
     }
 }
 
 /**
- * Class WooRPDRemoteAPI
+ * Class WCRPDRemoteAPI
  *
- * Manages WooCommerce API connections and requests for the WooRPD plugin.
+ * Manages WooCommerce API connections and requests for the WCRPD plugin.
  */
-class WooRPDRemoteAPI
+class WCRPDRemoteAPI
 {
     private const API_ENDPOINT_PRODUCTS = "wp-json/wc/v3/products";
     private const API_ENDPOINT_CATEGORIES = "wp-json/wc/v3/products/categories";
 
-    private const WOORPD_API_RATE_LIMIT = "woorpd_api_rate_limit";
+    private const WCRPD_API_RATE_LIMIT = "wcrpd_api_rate_limit";
 
     private $website_url;
     private $consumer_key;
@@ -52,11 +52,11 @@ class WooRPDRemoteAPI
     private $rate_limit = 10; // 10 requests per minute
 
     /**
-     * WooRPDRemoteAPI constructor.
+     * WCRPDRemoteAPI constructor.
      *
-     * @param WooRPDLogger|null $logger The logger instance (optional).
+     * @param WCRPDLogger|null $logger The logger instance (optional).
      */
-    public function __construct(WooRPDLogger $logger = null)
+    public function __construct(WCRPDLogger $logger = null)
     {
         $this->logger = $logger;
         $this->initializeRateLimit();
@@ -69,7 +69,7 @@ class WooRPDRemoteAPI
      * @param string $consumer_key    The API consumer key.
      * @param string $consumer_secret The API consumer secret.
      */
-    public function wooRPD_apiConnect($website_url, $consumer_key, $consumer_secret)
+    public function wcrpd_apiConnect($website_url, $consumer_key, $consumer_secret)
     {
         // Trim and sanitize the website URL. Set the website_url first, even if it's invalid.
         $this->website_url = rtrim(sanitize_text_field($website_url), '/');
@@ -102,8 +102,8 @@ class WooRPDRemoteAPI
      */
     private function initializeRateLimit(): void
     {
-        if (!get_transient(self::WOORPD_API_RATE_LIMIT)) {
-            set_transient(self::WOORPD_API_RATE_LIMIT, 0, $this->cache_duration);
+        if (!get_transient(self::WCRPD_API_RATE_LIMIT)) {
+            set_transient(self::WCRPD_API_RATE_LIMIT, 0, $this->cache_duration);
         }
     }
 
@@ -135,7 +135,7 @@ class WooRPDRemoteAPI
     public function flushCache()
     {
         global $wpdb;
-        $like_pattern = $wpdb->esc_like('_transient_woorpd_') . '%';
+        $like_pattern = $wpdb->esc_like('_transient_wcrpd_') . '%';
         $wpdb->query($wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s", $like_pattern));
         $this->logger->log("Cached is flushed", 'INFO');
     }
@@ -152,7 +152,7 @@ class WooRPDRemoteAPI
         if ($this->logger) {
             return $this->logger->log($message, $type);
         }
-        return array('error' => __("An error occurred while processing your request. Please check your API credentials and ensure your WooCommerce store is accessible.", "woorpd"));
+        return array('error' => __("An error occurred while processing your request. Please check your API credentials and ensure your WooCommerce store is accessible.", "wcrpd"));
     }
 
     /**
@@ -166,7 +166,7 @@ class WooRPDRemoteAPI
     private function makeRequest(string $endpoint, array $args = []): array
     {
         $constructed_url = esc_url_raw($this->website_url . "/" . $endpoint . "?" . http_build_query($args));
-        $cache_key = "woorpd_api_" . md5($constructed_url);
+        $cache_key = "wcrpd_api_" . md5($constructed_url);
 
         // for debug only
         // $this->handleError($constructed_url);
@@ -181,7 +181,7 @@ class WooRPDRemoteAPI
         $this->logger?->log("Connecting to $this->website_url", 'INFO');
 
         // Rate limiting
-        $current_requests = get_transient(self::WOORPD_API_RATE_LIMIT) ?: 0;
+        $current_requests = get_transient(self::WCRPD_API_RATE_LIMIT) ?: 0;
         if ($current_requests >= $this->rate_limit) {
             return $this->handleError("Rate limit exceeded. Please wait a moment and try again.", 'ERROR');
         }
@@ -212,7 +212,7 @@ class WooRPDRemoteAPI
             $this->logger?->log("Products are fetched and cached successfully.", 'INFO');
             set_transient($cache_key, $decoded_response, $this->cache_duration);
         }
-        set_transient(self::WOORPD_API_RATE_LIMIT, $current_requests + 1, $this->rate_limit);
+        set_transient(self::WCRPD_API_RATE_LIMIT, $current_requests + 1, $this->rate_limit);
 
         return $decoded_response;
     }
@@ -307,7 +307,7 @@ class WooRPDRemoteAPI
         if (count($all_products)) {
             return ['data' => array_slice($all_products, 0, $count_limit)];
         } else {
-            return ['error' => __("No products found matching the criteria.", "woorpd")];
+            return ['error' => __("No products found matching the criteria.", "wcrpd")];
         }
     }
 }

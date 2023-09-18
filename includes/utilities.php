@@ -5,15 +5,15 @@ if (!defined('ABSPATH')) {
     die('We\'re sorry, but you can not directly access this file.');
 }
 
-add_action('woorpd_reset_everything', [WooRPDUtilities::class, 'resetEverything']);
-add_action('woorpd_flush_cache', [WooRPDUtilities::class, 'flushCache']);
+add_action('wcrpd_reset_everything', [WCRPDUtilities::class, 'resetEverything']);
+add_action('wcrpd_flush_cache', [WCRPDUtilities::class, 'flushCache']);
 
 /**
- * Class WooRPDUtilities
+ * Class WCRPDUtilities
  *
- * Utility functions for WooRPD.
+ * Utility functions for WCRPD.
  */
-class WooRPDUtilities
+class WCRPDUtilities
 {
     /**
      * Reset everything (Flush cache and delete options).
@@ -31,7 +31,7 @@ class WooRPDUtilities
      */
     public static function flushCache(): void
     {
-        delete_transient('woorpd_api_rate_limit');
+        delete_transient('wcrpd_api_rate_limit');
         self::deleteAPIRequestCache();
         self::deleteRateLimitAndTimeoutTransients();
     }
@@ -42,10 +42,19 @@ class WooRPDUtilities
     private static function deleteAPIRequestCache(): void
     {
         global $wpdb;
-        $like_pattern = $wpdb->esc_like('_transient_woorpd_api_') . '%';
-        $sql = "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s";
-        $wpdb->query($wpdb->prepare($sql, $like_pattern));
+
+        // Delete transients starting with '_transient_wcrpd_'
+        $like_pattern1 = $wpdb->esc_like('_transient_wcrpd_') . '%';
+        $sql1 = "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s";
+        $wpdb->query($wpdb->prepare($sql1, $like_pattern1));
+
+        // Delete transients starting with '_transient_timeout_wcrpd_'
+        $like_pattern2 = $wpdb->esc_like('_transient_timeout_wcrpd_') . '%';
+        $sql2 = "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s";
+        $wpdb->query($wpdb->prepare($sql2, $like_pattern2));
     }
+
+
 
     /**
      * Delete all plugin options.
@@ -54,16 +63,16 @@ class WooRPDUtilities
     {
         // Combine all option keys into a single array
         $all_options = array_merge(
-            array_keys($GLOBALS['woorpd_api_settings']),
-            array_keys($GLOBALS['woorpd_display_settings']),
-            array_keys($GLOBALS['woorpd_debug_settings']),
-            $GLOBALS['woorpd_display_checkbox_options'],
-            $GLOBALS['woorpd_debug_checkbox_options']
+            array_keys($GLOBALS['wcrpd_api_settings']),
+            array_keys($GLOBALS['wcrpd_display_settings']),
+            array_keys($GLOBALS['wcrpd_debug_settings']),
+            $GLOBALS['wcrpd_display_checkbox_options'],
+            $GLOBALS['wcrpd_debug_checkbox_options']
         );
 
         // Add additional options to the list
-        $all_options[] = 'woorpd_api_connection_status';
-        $all_options[] = 'woorpd_all_categories';
+        $all_options[] = 'wcrpd_api_connection_status';
+        $all_options[] = 'wcrpd_all_categories';
 
         // Loop through each option and delete it
         foreach ($all_options as $option) {
@@ -77,7 +86,7 @@ class WooRPDUtilities
     private static function deleteRateLimitAndTimeoutTransients(): void
     {
         global $wpdb;
-        $sql = "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_woorpd_api_%'";
+        $sql = "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_wcrpd_api_%'";
         $transients = $wpdb->get_col($sql);
 
         array_walk($transients, static function ($transient): void {
