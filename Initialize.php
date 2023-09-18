@@ -47,15 +47,15 @@ add_action('admin_enqueue_scripts', 'wcrpd_enqueue_admin_assets');
 function wcrpd_enqueue_scripts()
 {
     // Register and enqueue frontend styles
-    wp_register_style('wcrpd-product-display-styles', plugin_dir_url(__FILE__) . 'includes/css/wcrpd-product-display-styles.css', [], '1.0.0');
-    wp_enqueue_style('wcrpd-product-display-styles');
+    wp_register_style('wcrpd-styles', plugin_dir_url(__FILE__) . 'includes/css/wcrpd-styles.css', [], '1.0.0');
+    wp_enqueue_style('wcrpd-styles');
 
     // Register and enqueue frontend scripts
-    wp_register_script('wcrpd-product-display-scripts', plugin_dir_url(__FILE__) . 'includes/js/wcrpd-product-display-scripts.js', ['jquery'], '1.0.0', true);
-    wp_enqueue_script('wcrpd-product-display-scripts');
+    wp_register_script('wcrpd-scripts', plugin_dir_url(__FILE__) . 'includes/js/wcrpd-scripts.js', ['jquery'], '1.0.0', true);
+    wp_enqueue_script('wcrpd-scripts');
 
     // Localize script for AJAX
-    wp_localize_script('wcrpd-product-display-scripts', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
+    wp_localize_script('wcrpd-scripts', 'frontendajax', ['ajaxurl' => admin_url('admin-ajax.php')]);
 }
 add_action('wp_enqueue_scripts', 'wcrpd_enqueue_scripts');
 
@@ -63,7 +63,7 @@ add_action('wp_enqueue_scripts', 'wcrpd_enqueue_scripts');
  * Adds a "Settings" link on the plugin page.
  * This link redirects to the WC Remote Products Display settings page.
  */
-add_filter('plugin_action_links_' . plugin_basename(WCRPD_PLUGIN_ROOT . 'wcrpd.php'), 'wcrpd_add_settings_link');
+add_filter('plugin_action_links_' . plugin_basename(WCRPD_PLUGIN_ROOT . 'wc-remote-products-display.php'), 'wcrpd_add_settings_link');
 function wcrpd_add_settings_link($links)
 {
     $settings_link = '<a href="' . esc_url(admin_url('options-general.php?page=wcrpd')) . '" title="' . esc_attr__('Go to WC Remote Products Display settings', 'wcrpd') . '">' . esc_html__('Settings', 'wcrpd') . '</a>';

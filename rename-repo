@@ -1,0 +1,4 @@
+git branch -m WC-Remote-Products-Display wcrpd
+git fetch origin
+git branch -u origin/wcrpd wcrpd
+git remote set-head origin -a
