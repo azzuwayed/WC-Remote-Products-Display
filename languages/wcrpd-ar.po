@@ -1,0 +1,304 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WC Remote Products Display\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-18 15:09+0000\n"
+"PO-Revision-Date: 2023-09-18 16:26+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100 >= 3 "
+"&& n%100<=10 ? 3 : n%100 >= 11 && n%100<=99 ? 4 : 5;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.4-dev; wp-6.3.1\n"
+"X-Domain: wcrpd"
+
+#. Author of the plugin
+msgid "Abdullah Alzuwayed"
+msgstr "عبدالله الزويد"
+
+#: admin/admin-template.php:173
+msgid "Advanced Settings (beta)"
+msgstr "إعدادات متقدمة (تجريبية)"
+
+#: admin/admin-settings.php:210
+msgid ""
+"All cache and transients have been flushed. First page load will be slower "
+"in order to cache the initial request."
+msgstr ""
+"تم مسح ذاكرة التخزين المؤقتة. سيكون تحميل الصفحة الأولى أبطأ من أجل تخزين "
+"ذاكرة مؤقتة جديدة."
+
+#: admin/admin-settings.php:194
+msgid ""
+"All options and cache have been reset. First page load will be slower in "
+"order to cache the initial request."
+msgstr ""
+"تمت إعادة ضبط جميع الخيارات وذاكرة التخزين المؤقتة. سيكون تحميل الصفحة "
+"الأولى أبطأ من أجل تخزين ذاكرة مؤقتة جديدة."
+
+#: includes/api-connect.php:155
+msgid ""
+"An error occurred while processing your request. Please check your API "
+"credentials and ensure your WooCommerce store is accessible."
+msgstr ""
+"حدث خطأ أثناء معالجة طلبك. يرجى التحقق من مفاتيح API والتأكد من إمكانية "
+"الوصول إلى متجر WooCommerce."
+
+#: admin/admin-template.php:8
+msgid "API Connection"
+msgstr "اتصال API"
+
+#: admin/admin-template.php:48
+msgid "API Connection failed"
+msgstr "فشل اتصال API"
+
+#: admin/admin-settings.php:354
+msgid "API connection failed"
+msgstr "فشل اتصال API"
+
+#: admin/admin-template.php:46
+msgid "API Connection is successful"
+msgstr "تم بنجاح اتصال API"
+
+#: admin/admin-template.php:81
+msgid "Button"
+msgstr "زر الرابط"
+
+#: admin/admin-template.php:177
+msgid "Cache Duration"
+msgstr "مدة ذاكرة التخزين المؤقت"
+
+#: admin/admin-template.php:78
+msgid "Category"
+msgstr "التصنيف"
+
+#: admin/admin-template.php:116
+msgid "Category IDs"
+msgstr "رقم التصنيف"
+
+#: includes/shortcode.php:128
+msgid "Category:"
+msgstr "التصنيف:"
+
+#: admin/admin-template.php:72
+msgid "Choose which product elements you would like to display on the card."
+msgstr "اختر العناصر التي ترغب في عرضها على بطاقة المنتج."
+
+#: admin/admin-template.php:29
+msgid "Consumer Key:"
+msgstr "Consumer Key:"
+
+#: admin/admin-template.php:36
+msgid "Consumer Secret:"
+msgstr "Consumer Secret:"
+
+#: admin/admin-template.php:94
+msgid "Count limit (beta)"
+msgstr "عدد المنتجات (تجريبية)"
+
+#: admin/admin-template.php:165
+msgid "Debug Mode"
+msgstr "وضع إصلاح المشاكل"
+
+#: admin/admin-template.php:14
+msgid "Debug Settings"
+msgstr "إعدادات إصلاح المشاكل"
+
+#: admin/admin-template.php:80
+msgid "Description"
+msgstr "الوصف"
+
+#: admin/admin-template.php:11
+msgid "Display Settings"
+msgstr "إعدادات العرض"
+
+#: admin/admin-template.php:142
+msgid ""
+"Example: <b>[wcrpd count_limit=\"6\" filtered_categories=\"1,2,3\"]</b> will "
+"apply both."
+msgstr ""
+"مثال: <b>[wcrpd count_limit=\"6\" filtered_categories=\"1,2,3\"]</b> سيطبق "
+"كليهما."
+
+#: admin/admin-template.php:140
+msgid ""
+"Example: <b>[wcrpd count_limit=\"6\"]</b> will display a maximum of 6 "
+"products."
+msgstr "مثال: <b>[wcrpd count_limit=\"6\"]</b> سيعرض 6 منتجات كحد أقصى."
+
+#: admin/admin-template.php:141
+msgid ""
+"Example: <b>[wcrpd filtered_categories=\"1,2,3\"]</b> will display products "
+"from these categories."
+msgstr ""
+"مثال: <b>[wcrpd filtered_categories=\"1,2,3\"]</b> سيعرض منتجات من التصنيفات "
+"المحددة."
+
+#: admin/admin-template.php:110
+msgid "Fetched Categories"
+msgstr "التصنيفات التي تم جلبها"
+
+#: admin/admin-template.php:204
+msgid "Flush Cache"
+msgstr "مسح الذاكرة المؤقتة"
+
+#: admin/admin-template.php:178
+msgid ""
+"Frequent API calls may overload the server. Long cache might serve outdated "
+"data. Cache is shared between users and saved in your database. (default is "
+"6 hours = 21600 seconds)"
+msgstr ""
+"نقص المدة قد يؤدي اتصالات API متكررة وزيادة الضغط على الموقع. زيادة المدة قد "
+"يعرض بيانات قديمة وغير محدثة. ذاكرة التخزين المؤقتة مشتركة بين الزوار ويتم "
+"حفظها في قاعدة البيانات مرة واحدة. (الافتراضي 6 ساعات = 21600 ثانية)"
+
+#: admin/admin-template.php:91
+msgid "Global Display Settings"
+msgstr "إعدادات العرض العامة"
+
+#: Initialize.php:69
+msgid "Go to WC Remote Products Display settings"
+msgstr "الذهاب إلى إعدادات عرض منتجات ووكومرس عن بعد"
+
+#: admin/admin-template.php:112
+msgid ""
+"Here you should see the fetched categories from your remote website as "
+"[Category Name: Category ID]:"
+msgstr ""
+
+#: admin/admin-template.php:191
+msgid ""
+"Higher limits can exceed the API's allowance, leading to a ban. (default is "
+"30 per minute)"
+msgstr ""
+
+#: admin/admin-template.php:96
+msgid ""
+"How many products to display per shortcode. This limit must be equal or "
+"greater than any shortcode, and not greater than available products on the "
+"remote website, otherwise you will get an error."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://azzuwayed.com"
+msgstr "https://azzuwayed.com"
+
+#. URI of the plugin
+msgid "https://azzuwayed.com/wcrpd"
+msgstr "https://azzuwayed.com/wcrpd"
+
+#: admin/admin-template.php:138
+msgid "If attributes are not set, they will default to the global settings."
+msgstr ""
+
+#: admin/admin-template.php:76
+msgid "Image"
+msgstr "الصورة"
+
+#: admin/admin-template.php:136
+msgid "Instructions:"
+msgstr "تعلميات:"
+
+#: admin/admin-template.php:77
+msgid "Name"
+msgstr "العنوان"
+
+#: admin/admin-settings.php:359
+msgid "No categories found"
+msgstr "لم يتم إيجاد تصنيفات"
+
+#: includes/api-connect.php:310
+msgid "No products found matching the criteria."
+msgstr ""
+
+#: admin/admin-template.php:167
+msgid ""
+"Only enable on development environment. Wordpress debug must be enabled for "
+"this to work. The debug includes errors and trivial data, and will make "
+"frontend errors more detailed."
+msgstr ""
+
+#: admin/admin-template.php:79
+msgid "Price"
+msgstr "السعر"
+
+#: admin/admin-template.php:71
+msgid "Product Card Elements"
+msgstr "عناصر بطاقة المنتج"
+
+#: admin/admin-template.php:190
+msgid "Rate Limit"
+msgstr "حد تكرار الاتصال"
+
+#: wc-remote-products-display.php:48
+msgid "Remote Prod Display WC plugin requires PHP 7.4 or newer."
+msgstr ""
+
+#: admin/admin-template.php:22
+msgid "Remote WooCommerce URL:"
+msgstr "رابط ووكومرس:"
+
+#: admin/admin-template.php:203
+msgid "Reset Plugin"
+msgstr "إعادة الضبط"
+
+#: admin/admin-template.php:150 admin/admin-template.php:201
+msgid "Save Changes"
+msgstr "حفظ التعديلات"
+
+#: Initialize.php:69
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: includes/shortcode.php:163
+msgid "Shop Now"
+msgstr "تسوق الآن"
+
+#. Description of the plugin
+msgid ""
+"Showcase WooCommerce products on another WordPress website effortlessly. "
+"Configure your settings, and then use the `[wcrpd]` shortcode to display "
+"products in posts, pages, or widgets."
+msgstr ""
+"اعرض منتجات WooCommerce على موقع WordPress آخر بسهولة. قم بتكوين إعداداتك، "
+"ثم استخدم الرمز القصير `[wcrpd]` لعرض المنتجات في المنشورات أو الصفحات أو "
+"عناصر واجهة المستخدم."
+
+#: admin/admin-template.php:183
+msgid "Timeout Duration"
+msgstr "مدة مهلة الاتصال"
+
+#: admin/admin-template.php:117
+msgid ""
+"Use comma-separated IDs of the categories you want to include exclusivly. "
+"\"Filtered categories\" option must be enabled for this to work."
+msgstr ""
+"استخدم معرفات مفصولة بالفاصلة الرقمية مثل 1,2,3 للتصنيفات التي تريد تضمينها "
+"حصريًا. يجب تمكين خيار \"تصفية التصنيفات\" حتى تعمل هذه الميزة."
+
+#: admin/admin-template.php:174
+msgid ""
+"Warning: adjusting these settings without understanding their impact can "
+"result in poor performance."
+msgstr ""
+
+#: admin/admin-template.php:107
+msgid ""
+"Warning: when this option is enabled, Category IDs become mandatory either "
+"in global or in shortcodes, otherwise you will get an error."
+msgstr ""
+"تحذير: عند تمكين هذا الخيار، تصبح أرقام التصنيفات إلزامية سواء في الإعدادات "
+"العامة أو في الرموز القصيرة، وإلا فسوف تحصل على خطأ."
+
+#. Name of the plugin
+#: admin/admin-template.php:3
+msgid "WC Remote Products Display"
+msgstr "عرض منتجات ووكومرس عن بعد"
+
+#: admin/admin-template.php:137
+msgid "You can override global settings with shortcode attributes."
+msgstr "يمكنك تجاوز الإعدادات العامة باستخدام سمات الرمز القصير."

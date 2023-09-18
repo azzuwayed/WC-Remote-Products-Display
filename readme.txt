@@ -57,6 +57,7 @@ WCRPD allows you to effortlessly display WooCommerce products on any WordPress w
 
 == Troubleshooting ==
 - If you encounter issues, enable the debug option from plugin settings. Make sure WordPress debug and debug logging are enabled.
+- Try to flush cache or reset plugin which are located in the debug settings page.
 - For further assistance, visit our support forum.
 
 == Frequently Asked Questions ==

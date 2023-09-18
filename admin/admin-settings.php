@@ -340,26 +340,28 @@ if (!function_exists('wcrpd_add_admin_menu')) {
 
 /**
  * Function to print saved categories.
+ * 
+ * @return string The formatted string of saved categories or an error message.
  */
-function print_saved_categories()
+function print_saved_categories(): string
 {
-    $api_connection_status = get_option('wcrpd_api_connection_status');
-
-    // Check API connection status first to avoid unnecessary operations
-    if ($api_connection_status === false) {
-        return 'API connection failed';
-    }
-
-    // Retrieve the saved category pairs from WordPress options
+    // Retrieve API connection status and saved category pairs from WordPress options
+    $api_connection_status = get_option('wcrpd_api_connection_status', false);
     $saved_category_pairs = get_option('wcrpd_all_categories', []);
 
-    if (empty($saved_category_pairs)) {
-        return 'No categories found';
+    // Early return if API connection failed
+    if (!$api_connection_status) {
+        return __('API connection failed', 'wcrpd');
     }
 
-    // Convert the category pairs array to a string, wrapping each pair in square brackets
-    $category_pairs_str = '[' . implode('], [', $saved_category_pairs) . ']';
+    // Early return if no categories found
+    if (empty($saved_category_pairs)) {
+        return __('No categories found', 'wcrpd');
+    }
 
-    // Return the formatted string wrapped in a span with a green-color class
-    return sprintf('<span class="green-color">[Category Name: Category ID] => %s</span>', esc_html($category_pairs_str));
+    // Format and return the category pairs
+    return sprintf(
+        '<span class="green-color">%s</span>',
+        esc_html('[' . implode('], [', $saved_category_pairs) . ']')
+    );
 }

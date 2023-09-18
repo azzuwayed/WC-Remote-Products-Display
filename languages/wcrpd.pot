@@ -1,0 +1,284 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WC Remote Products Display\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-18 15:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.3.1\n"
+"X-Domain: wcrpd"
+
+#. Author of the plugin
+msgid "Abdullah Alzuwayed"
+msgstr ""
+
+#: admin/admin-template.php:173
+msgid "Advanced Settings (beta)"
+msgstr ""
+
+#: admin/admin-settings.php:210
+msgid ""
+"All cache and transients have been flushed. First page load will be slower "
+"in order to cache the initial request."
+msgstr ""
+
+#: admin/admin-settings.php:194
+msgid ""
+"All options and cache have been reset. First page load will be slower in "
+"order to cache the initial request."
+msgstr ""
+
+#: includes/api-connect.php:155
+msgid ""
+"An error occurred while processing your request. Please check your API "
+"credentials and ensure your WooCommerce store is accessible."
+msgstr ""
+
+#: admin/admin-template.php:8
+msgid "API Connection"
+msgstr ""
+
+#: admin/admin-template.php:48
+msgid "API Connection failed"
+msgstr ""
+
+#: admin/admin-settings.php:354
+msgid "API connection failed"
+msgstr ""
+
+#: admin/admin-template.php:46
+msgid "API Connection is successful"
+msgstr ""
+
+#: admin/admin-template.php:81
+msgid "Button"
+msgstr ""
+
+#: admin/admin-template.php:177
+msgid "Cache Duration"
+msgstr ""
+
+#: admin/admin-template.php:78
+msgid "Category"
+msgstr ""
+
+#: admin/admin-template.php:116
+msgid "Category IDs"
+msgstr ""
+
+#: includes/shortcode.php:128
+msgid "Category:"
+msgstr ""
+
+#: admin/admin-template.php:72
+msgid "Choose which product elements you would like to display on the card."
+msgstr ""
+
+#: admin/admin-template.php:29
+msgid "Consumer Key:"
+msgstr ""
+
+#: admin/admin-template.php:36
+msgid "Consumer Secret:"
+msgstr ""
+
+#: admin/admin-template.php:94
+msgid "Count limit (beta)"
+msgstr ""
+
+#: admin/admin-template.php:165
+msgid "Debug Mode"
+msgstr ""
+
+#: admin/admin-template.php:14
+msgid "Debug Settings"
+msgstr ""
+
+#: admin/admin-template.php:80
+msgid "Description"
+msgstr ""
+
+#: admin/admin-template.php:11
+msgid "Display Settings"
+msgstr ""
+
+#: admin/admin-template.php:142
+msgid ""
+"Example: <b>[wcrpd count_limit=\"6\" filtered_categories=\"1,2,3\"]</b> will "
+"apply both."
+msgstr ""
+
+#: admin/admin-template.php:140
+msgid ""
+"Example: <b>[wcrpd count_limit=\"6\"]</b> will display a maximum of 6 "
+"products."
+msgstr ""
+
+#: admin/admin-template.php:141
+msgid ""
+"Example: <b>[wcrpd filtered_categories=\"1,2,3\"]</b> will display products "
+"from these categories."
+msgstr ""
+
+#: admin/admin-template.php:110
+msgid "Fetched Categories"
+msgstr ""
+
+#: admin/admin-template.php:204
+msgid "Flush Cache"
+msgstr ""
+
+#: admin/admin-template.php:178
+msgid ""
+"Frequent API calls may overload the server. Long cache might serve outdated "
+"data. Cache is shared between users and saved in your database. (default is "
+"6 hours = 21600 seconds)"
+msgstr ""
+
+#: admin/admin-template.php:91
+msgid "Global Display Settings"
+msgstr ""
+
+#: Initialize.php:69
+msgid "Go to WC Remote Products Display settings"
+msgstr ""
+
+#: admin/admin-template.php:112
+msgid ""
+"Here you should see the fetched categories from your remote website as "
+"[Category Name: Category ID]:"
+msgstr ""
+
+#: admin/admin-template.php:191
+msgid ""
+"Higher limits can exceed the API's allowance, leading to a ban. (default is "
+"30 per minute)"
+msgstr ""
+
+#: admin/admin-template.php:96
+msgid ""
+"How many products to display per shortcode. This limit must be equal or "
+"greater than any shortcode, and not greater than available products on the "
+"remote website, otherwise you will get an error."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://azzuwayed.com"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://azzuwayed.com/wcrpd"
+msgstr ""
+
+#: admin/admin-template.php:138
+msgid "If attributes are not set, they will default to the global settings."
+msgstr ""
+
+#: admin/admin-template.php:76
+msgid "Image"
+msgstr ""
+
+#: admin/admin-template.php:136
+msgid "Instructions:"
+msgstr ""
+
+#: admin/admin-template.php:77
+msgid "Name"
+msgstr ""
+
+#: admin/admin-settings.php:359
+msgid "No categories found"
+msgstr ""
+
+#: includes/api-connect.php:310
+msgid "No products found matching the criteria."
+msgstr ""
+
+#: admin/admin-template.php:167
+msgid ""
+"Only enable on development environment. Wordpress debug must be enabled for "
+"this to work. The debug includes errors and trivial data, and will make "
+"frontend errors more detailed."
+msgstr ""
+
+#: admin/admin-template.php:79
+msgid "Price"
+msgstr ""
+
+#: admin/admin-template.php:71
+msgid "Product Card Elements"
+msgstr ""
+
+#: admin/admin-template.php:190
+msgid "Rate Limit"
+msgstr ""
+
+#: wc-remote-products-display.php:48
+msgid "Remote Prod Display WC plugin requires PHP 7.4 or newer."
+msgstr ""
+
+#: admin/admin-template.php:22
+msgid "Remote WooCommerce URL:"
+msgstr ""
+
+#: admin/admin-template.php:203
+msgid "Reset Plugin"
+msgstr ""
+
+#: admin/admin-template.php:150 admin/admin-template.php:201
+msgid "Save Changes"
+msgstr ""
+
+#: Initialize.php:69
+msgid "Settings"
+msgstr ""
+
+#: includes/shortcode.php:163
+msgid "Shop Now"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Showcase WooCommerce products on another WordPress website effortlessly. "
+"Configure your settings, and then use the `[wcrpd]` shortcode to display "
+"products in posts, pages, or widgets."
+msgstr ""
+
+#: admin/admin-template.php:183
+msgid "Timeout Duration"
+msgstr ""
+
+#: admin/admin-template.php:117
+msgid ""
+"Use comma-separated IDs of the categories you want to include exclusivly. "
+"\"Filtered categories\" option must be enabled for this to work."
+msgstr ""
+
+#: admin/admin-template.php:174
+msgid ""
+"Warning: adjusting these settings without understanding their impact can "
+"result in poor performance."
+msgstr ""
+
+#: admin/admin-template.php:107
+msgid ""
+"Warning: when this option is enabled, Category IDs become mandatory either "
+"in global or in shortcodes, otherwise you will get an error."
+msgstr ""
+
+#. Name of the plugin
+#: admin/admin-template.php:3
+msgid "WC Remote Products Display"
+msgstr ""
+
+#: admin/admin-template.php:137
+msgid "You can override global settings with shortcode attributes."
+msgstr ""

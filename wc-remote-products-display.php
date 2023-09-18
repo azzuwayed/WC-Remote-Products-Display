@@ -3,7 +3,7 @@
 /*
  * Plugin Name:     WC Remote Products Display
  * Plugin URI:      https://azzuwayed.com/wcrpd
- * Description:     WCRPD fetches products from a remote website using WooCommerce webhooks then displays them using the shortcode [wcrpd] anywhere in your posts and pages.
+ * Description:     Showcase WooCommerce products on another WordPress website effortlessly. Configure your settings, and then use the `[wcrpd]` shortcode to display products in posts, pages, or widgets.
  * Version:         1.0.0
  * Author:          Abdullah Alzuwayed
  * Author URI:      https://azzuwayed.com 
@@ -19,7 +19,6 @@ if (!defined('ABSPATH')) {
 }
 
 define('WCRPD_VERSION', '1.0.0');
-define('WCRPD_TEXTDOMAIN', 'wcrpd');
 define('WCRPD_NAME', 'wcrpd');
 define('WCRPD_PLUGIN_ROOT', plugin_dir_path(__FILE__));
 define('WCRPD_PLUGIN_ABSOLUTE', __FILE__);
@@ -29,7 +28,7 @@ define('WCRPD_WP_VERSION', '6.0');
 add_action(
     'init',
     static function () {
-        load_plugin_textdomain(WCRPD_TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('wcrpd', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 );
 
@@ -46,7 +45,7 @@ if (version_compare(PHP_VERSION, WCRPD_MIN_PHP_VERSION, '<=')) {
             echo wp_kses_post(
                 sprintf(
                     '<div class="notice notice-error"><p>%s</p></div>',
-                    __('Remote Prod Display WC plugin requires PHP 7.4 or newer.', WCRPD_TEXTDOMAIN)
+                    __('Remote Prod Display WC plugin requires PHP 7.4 or newer.', 'wcrpd')
                 )
             );
         }
