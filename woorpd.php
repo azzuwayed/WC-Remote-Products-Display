@@ -70,7 +70,7 @@ class WooRPDSettings
     {
         $defaults = [
             'woorpd_api_connection_status' => false,
-            'woorpd_all_categories' => '',
+            'woorpd_all_categories' => [],
             'woorpd_api_woo_url' => '',
             'woorpd_api_woo_ck' => '',
             'woorpd_api_woo_cs' => '',

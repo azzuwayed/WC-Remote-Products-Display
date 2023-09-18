@@ -207,7 +207,7 @@ function woorpd_flush_cache()
         echo wp_kses_post(
             sprintf(
                 '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-                __('All cache and transients have been flushed. Initial load will be slower to cache the request.', 'woorpd')
+                __('All cache and transients have been flushed. First page load will be slower in order to cache the initial request.', 'woorpd')
             )
         );
     });
@@ -341,8 +341,7 @@ if (!function_exists('woorpd_add_admin_menu')) {
 /**
  * Function to print saved categories.
  */
-function print_saved_categories()
-{
+function print_saved_categories() {
     // Retrieve the saved category pairs from WordPress options
     $saved_category_pairs = get_option('woorpd_all_categories', []);
 
@@ -351,9 +350,9 @@ function print_saved_categories()
         return "No categories found. Verify API connection.";
     }
 
-    // Convert the category pairs array to a string
-    $category_pairs_str = implode(', ', $saved_category_pairs);
+    // Convert the category pairs array to a string, wrapping each pair in square brackets
+    $category_pairs_str = '[' . implode('], [', $saved_category_pairs) . ']';
 
-    // Return the formatted string
-    return '<span class="green-color">Category Name: Category ID => ' . esc_html($category_pairs_str) . '</span>';
+    // Return the formatted string wrapped in a span with a green-color class
+    return '<span class="green-color">[Category Name: Category ID] => ' . esc_html($category_pairs_str) . '</span>';
 }
