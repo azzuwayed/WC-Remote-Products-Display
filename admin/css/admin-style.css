@@ -287,3 +287,18 @@
   color: green !important;
   font-weight: 600;
 }
+
+/* -------------------------------
+* RTL Styles
+* -------------------------------- */
+
+html[dir="rtl"][lang="ar"] #wcrpd_api_woo_url,
+html[dir="rtl"][lang="ar"] #wcrpd_api_woo_ck,
+html[dir="rtl"][lang="ar"] #wcrpd_api_woo_cs {
+  text-align: left;
+}
+
+html[dir="rtl"][lang="ar"] .tablink {
+  margin-left: 10px;
+  margin-right: unset;
+}

@@ -45,7 +45,7 @@
                 if ($isConnected) {
                     echo '<span class="green-color">' . esc_html__('API Connection is successful', 'wcrpd') . '</span>';
                 } else {
-                    echo '<span class="green-color">' . esc_html__('API Connection failed', 'wcrpd') . '</span>';
+                    echo '<span class="green-red">' . esc_html__('API Connection failed', 'wcrpd') . '</span>';
                 }
                 ?>
             </div>
@@ -56,7 +56,7 @@
             <input type="hidden" name="wcrpd_save_api_nonce" value="<?php echo $api_nonce; ?>">
 
             <div class="wcrpd-save-container">
-                <input type="submit" name="save" value="Save Changes" class="button button-primary" />
+                <input type="submit" name="save" value="<?php _e('Save Changes', 'wcrpd'); ?>" class="button button-primary" />
                 <div class="wcrpd-right-buttons">
                 </div>
             </div>
@@ -102,7 +102,7 @@
 
                 <!-- Filtered Categories Checkbox -->
                 <label class="wcrpd-mn-top">
-                    <?php generate_checkbox('wcrpd_display_filtered_categories', __('Filtered categories (beta)', 'WCRPD_TEXTDOMAIN'), get_option('wcrpd_display_filtered_categories', '')); ?>
+                    <?php generate_checkbox('wcrpd_display_filtered_categories', __('Filtered categories (beta)', 'wcrpd'), get_option('wcrpd_display_filtered_categories', '')); ?>
                 </label>
                 <p class="description red-color"><?php _e('Warning: when this option is enabled, Category IDs become mandatory either in global or in shortcodes, otherwise you will get an error.', 'wcrpd'); ?></p>
 
@@ -165,7 +165,7 @@
                 <legend><?php _e('Debug Mode', 'wcrpd'); ?></legend>
                 <label>
                     <p class="description"><?php _e('Only enable on development environment. Wordpress debug must be enabled for this to work. The debug includes errors and trivial data, and will make frontend errors more detailed.', 'wcrpd'); ?></p>
-                    <?php generate_checkbox('wcrpd_debug_enable_logging', 'Enabled', get_option('wcrpd_debug_enable_logging', '')); ?>
+                    <?php generate_checkbox('wcrpd_debug_enable_logging', __('Enabled', 'wcrpd'), get_option('wcrpd_debug_enable_logging', '')); ?>
                 </label>
             </fieldset>
 
@@ -181,8 +181,7 @@
                 </label>
                 <label class="wcrpd-mn-top">
                     <?php _e('Timeout Duration', 'wcrpd'); ?>
-                    <p class="description">Short timeouts may result in errors, while long timeouts can slow down the user experience.
-                        (default is 10 seconds)
+                    <p class="description"> <?php _e('Short timeouts may result in errors, while long timeouts can slow down the user experience. (default is 10 seconds)', 'wcrpd'); ?>
                     </p>
                     <input type="text" name="wcrpd_debug_timeout" value="<?php echo esc_attr(get_option('wcrpd_debug_timeout', '')); ?>">
                 </label>

@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: WC Remote Products Display\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-18 15:09+0000\n"
-"PO-Revision-Date: 2023-09-18 16:26+0000\n"
-"Last-Translator: \n"
-"Language-Team: Arabic\n"
+"PO-Revision-Date: 2023-09-18 19:06+0000\n"
+"Last-Translator: WooRPD\n"
+"Language-Team: العربية\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100 >= 3 "
 "&& n%100<=10 ? 3 : n%100 >= 11 && n%100<=99 ? 4 : 5;\n"
@@ -22,7 +22,7 @@ msgstr "عبدالله الزويد"
 
 #: admin/admin-template.php:173
 msgid "Advanced Settings (beta)"
-msgstr "إعدادات متقدمة (تجريبية)"
+msgstr "إعدادات متقدمة (ميزة تجريبية)"
 
 #: admin/admin-settings.php:210
 msgid ""
@@ -90,15 +90,15 @@ msgstr "اختر العناصر التي ترغب في عرضها على بطا�
 
 #: admin/admin-template.php:29
 msgid "Consumer Key:"
-msgstr "Consumer Key:"
+msgstr "مفتاح Consumer Key:"
 
 #: admin/admin-template.php:36
 msgid "Consumer Secret:"
-msgstr "Consumer Secret:"
+msgstr "مفتاح Consumer Secret:"
 
 #: admin/admin-template.php:94
 msgid "Count limit (beta)"
-msgstr "عدد المنتجات (تجريبية)"
+msgstr "عدد المنتجات (ميزة تجريبية)"
 
 #: admin/admin-template.php:165
 msgid "Debug Mode"
@@ -106,7 +106,7 @@ msgstr "وضع إصلاح المشاكل"
 
 #: admin/admin-template.php:14
 msgid "Debug Settings"
-msgstr "إعدادات إصلاح المشاكل"
+msgstr "إصلاح المشاكل"
 
 #: admin/admin-template.php:80
 msgid "Description"
@@ -115,6 +115,10 @@ msgstr "الوصف"
 #: admin/admin-template.php:11
 msgid "Display Settings"
 msgstr "إعدادات العرض"
+
+#: admin/admin-template.php:168
+msgid "Enabled"
+msgstr "تفعيل"
 
 #: admin/admin-template.php:142
 msgid ""
@@ -142,7 +146,11 @@ msgstr ""
 msgid "Fetched Categories"
 msgstr "التصنيفات التي تم جلبها"
 
-#: admin/admin-template.php:204
+#: admin/admin-template.php:105
+msgid "Filtered categories (beta)"
+msgstr "تصفية التصنيفات (ميزة تجريبية)"
+
+#: admin/admin-template.php:203
 msgid "Flush Cache"
 msgstr "مسح الذاكرة المؤقتة"
 
@@ -162,19 +170,23 @@ msgstr "إعدادات العرض العامة"
 
 #: Initialize.php:69
 msgid "Go to WC Remote Products Display settings"
-msgstr "الذهاب إلى إعدادات عرض منتجات ووكومرس عن بعد"
+msgstr "الذهاب إلى إعدادات عرض منتجات ووكومرس عن بعد (WCRPD)"
 
 #: admin/admin-template.php:112
 msgid ""
 "Here you should see the fetched categories from your remote website as "
 "[Category Name: Category ID]:"
 msgstr ""
+"هنا تظهر التصنيفات التي تم جلبها من موقع ووكومرس البعيد كـ [اسم التصنيف: رقم "
+"التصنيف]:"
 
-#: admin/admin-template.php:191
+#: admin/admin-template.php:190
 msgid ""
 "Higher limits can exceed the API's allowance, leading to a ban. (default is "
 "30 per minute)"
 msgstr ""
+"زيادة عدد الاتصالات قد يؤدي إلى تتجاوز الحد الأعلى المسموح به لاتصالات (API) "
+"مما يؤدي إلى الحظر. (الافتراضي 30 في الدقيقة)"
 
 #: admin/admin-template.php:96
 msgid ""
@@ -182,6 +194,9 @@ msgid ""
 "greater than any shortcode, and not greater than available products on the "
 "remote website, otherwise you will get an error."
 msgstr ""
+"كم عدد المنتجات التي سيتم عرضها لكل رمز قصير. يجب أن يكون هذا الحد مساويًا "
+"أو أكبر من أي رمز قصير، وليس أكبر من المنتجات المتاحة على موقع ووكومرس "
+"البعيد، وإلا فسوف تحصل على خطأ."
 
 #. Author URI of the plugin
 msgid "https://azzuwayed.com"
@@ -193,7 +208,7 @@ msgstr "https://azzuwayed.com/wcrpd"
 
 #: admin/admin-template.php:138
 msgid "If attributes are not set, they will default to the global settings."
-msgstr ""
+msgstr "إذا لم يتم تعيين السمات، فسيتم تعيينها افتراضيًا من الإعدادات العامة."
 
 #: admin/admin-template.php:76
 msgid "Image"
@@ -213,7 +228,7 @@ msgstr "لم يتم إيجاد تصنيفات"
 
 #: includes/api-connect.php:310
 msgid "No products found matching the criteria."
-msgstr ""
+msgstr "لم يتم العثور على منتجات مطابقة للخيارات."
 
 #: admin/admin-template.php:167
 msgid ""
@@ -221,6 +236,9 @@ msgid ""
 "this to work. The debug includes errors and trivial data, and will make "
 "frontend errors more detailed."
 msgstr ""
+"ينصح بالتفعيل في بيئة التطوير فقط، يجب تمكين تصحيح أخطاء Wordpress حتى تعمل "
+"هذه الميزة. عند التفعيل يتم تسجيل الأخطاء وبيانات إضافية، وسيجعل أخطاء "
+"الواجهة الأمامية أكثر تفصيلاً."
 
 #: admin/admin-template.php:79
 msgid "Price"
@@ -230,25 +248,26 @@ msgstr "السعر"
 msgid "Product Card Elements"
 msgstr "عناصر بطاقة المنتج"
 
-#: admin/admin-template.php:190
+#: admin/admin-template.php:189
 msgid "Rate Limit"
 msgstr "حد تكرار الاتصال"
 
 #: wc-remote-products-display.php:48
 msgid "Remote Prod Display WC plugin requires PHP 7.4 or newer."
-msgstr ""
+msgstr "يتطلب عرض منتجات ووكومرس عن بعد (WCRPD) إلى نسخة PHP 7.4 أو أحدث."
 
 #: admin/admin-template.php:22
 msgid "Remote WooCommerce URL:"
 msgstr "رابط ووكومرس:"
 
-#: admin/admin-template.php:203
+#: admin/admin-template.php:202
 msgid "Reset Plugin"
 msgstr "إعادة الضبط"
 
-#: admin/admin-template.php:150 admin/admin-template.php:201
+#: admin/admin-template.php:59 admin/admin-template.php:150
+#: admin/admin-template.php:200
 msgid "Save Changes"
-msgstr "حفظ التعديلات"
+msgstr "حفظ التغييرات"
 
 #: Initialize.php:69
 msgid "Settings"
@@ -257,6 +276,14 @@ msgstr "الإعدادات"
 #: includes/shortcode.php:163
 msgid "Shop Now"
 msgstr "تسوق الآن"
+
+#: admin/admin-template.php:184
+msgid ""
+"Short timeouts may result in errors, while long timeouts can slow down the "
+"user experience. (default is 10 seconds)"
+msgstr ""
+"قد يؤدي نقص مهلة الاتصال إلى حدوث أخطاء، بينما يمكن أن تؤدي زيادة مهلة "
+"الاتصال إلى إبطاء تجربة المستخدم. (الافتراضي 10 ثواني)"
 
 #. Description of the plugin
 msgid ""
@@ -284,7 +311,7 @@ msgstr ""
 msgid ""
 "Warning: adjusting these settings without understanding their impact can "
 "result in poor performance."
-msgstr ""
+msgstr "تحذير: قد يؤدي ضبط هذه الإعدادات دون فهم تأثيرها إلى ضعف الأداء."
 
 #: admin/admin-template.php:107
 msgid ""
@@ -297,7 +324,7 @@ msgstr ""
 #. Name of the plugin
 #: admin/admin-template.php:3
 msgid "WC Remote Products Display"
-msgstr "عرض منتجات ووكومرس عن بعد"
+msgstr "عرض منتجات ووكومرس عن بعد (WCRPD)"
 
 #: admin/admin-template.php:137
 msgid "You can override global settings with shortcode attributes."

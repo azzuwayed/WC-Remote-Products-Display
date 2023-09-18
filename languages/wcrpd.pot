@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WC Remote Products Display\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-18 15:09+0000\n"
+"POT-Creation-Date: 2023-09-18 18:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.3.1\n"
+"X-Loco-Version: 2.6.4-dev; wp-6.3.1\n"
 "X-Domain: wcrpd"
 
 #. Author of the plugin
@@ -110,6 +110,10 @@ msgstr ""
 msgid "Display Settings"
 msgstr ""
 
+#: admin/admin-template.php:168
+msgid "Enabled"
+msgstr ""
+
 #: admin/admin-template.php:142
 msgid ""
 "Example: <b>[wcrpd count_limit=\"6\" filtered_categories=\"1,2,3\"]</b> will "
@@ -132,7 +136,11 @@ msgstr ""
 msgid "Fetched Categories"
 msgstr ""
 
-#: admin/admin-template.php:204
+#: admin/admin-template.php:105
+msgid "Filtered categories (beta)"
+msgstr ""
+
+#: admin/admin-template.php:203
 msgid "Flush Cache"
 msgstr ""
 
@@ -157,7 +165,7 @@ msgid ""
 "[Category Name: Category ID]:"
 msgstr ""
 
-#: admin/admin-template.php:191
+#: admin/admin-template.php:190
 msgid ""
 "Higher limits can exceed the API's allowance, leading to a ban. (default is "
 "30 per minute)"
@@ -217,7 +225,7 @@ msgstr ""
 msgid "Product Card Elements"
 msgstr ""
 
-#: admin/admin-template.php:190
+#: admin/admin-template.php:189
 msgid "Rate Limit"
 msgstr ""
 
@@ -229,11 +237,12 @@ msgstr ""
 msgid "Remote WooCommerce URL:"
 msgstr ""
 
-#: admin/admin-template.php:203
+#: admin/admin-template.php:202
 msgid "Reset Plugin"
 msgstr ""
 
-#: admin/admin-template.php:150 admin/admin-template.php:201
+#: admin/admin-template.php:59 admin/admin-template.php:150
+#: admin/admin-template.php:200
 msgid "Save Changes"
 msgstr ""
 
@@ -243,6 +252,12 @@ msgstr ""
 
 #: includes/shortcode.php:163
 msgid "Shop Now"
+msgstr ""
+
+#: admin/admin-template.php:184
+msgid ""
+"Short timeouts may result in errors, while long timeouts can slow down the "
+"user experience. (default is 10 seconds)"
 msgstr ""
 
 #. Description of the plugin
